@@ -17,7 +17,7 @@ void setup()
     if (int(prob[a]) > 0) {
       full += prob[a] + ",";
       full2 += spectrumA[a] + ",";
-      full3 += distance[a] + ",";
+      full3 += distance[a] + ":";
     }
     String[] x = split(full, ",");
     if (x.length >= buffer) {  
