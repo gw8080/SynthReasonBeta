@@ -1,8 +1,8 @@
-PrintWriter outputx; //<>// //<>//
+PrintWriter outputx; //<>// //<>// //<>// //<>//
 PrintWriter outputy;
 PrintWriter outputz;
 int block = 256;
-int num = 100;
+int num = 10;
 int sens = 64;
 int searchlength = 64;
 int searchlength2 = 64;
@@ -16,7 +16,6 @@ void setup()
   String spectrum = "";
   for (int loop = 0; loop < num; loop++) {  
     spectrum += decide(initTuring("turing.txt"), probability("prob.txt"), loadFilter("filter.txt"));
-    spectrum += " ";
   }
   spectrum = generate(spectrum, loadFilter("filter.txt"), loadResources("text.txt"));
   outputz.println(spectrum);
@@ -70,17 +69,9 @@ String[] probability(String file) {
   String[] prob = split(list, ",");
   return prob;
 }
-String decide(String[] spectrumA, String[] prob, String[] check2) {
-  String[] spec = new String[0], spec2 = new String[0];
-  for (int count = 0; count < searchlengthInit; count++) {
-    float r = random(spectrumA.length-1);
-    int xx = round(r);
-    spec = split(spectrumA[xx], " ");
-    if (int(prob[xx]) > 20 ) {
-      break;
-    }
-  }
+String collocate(String[] spectrumA, String[] spec) {
   String collocates = "";
+  String[] spec2 = new String[0];
   for (int count = 0; count < spectrumA.length-2; count++) {
     float r = random(spectrumA.length-2);
     int xx = round(r);
@@ -89,9 +80,34 @@ String decide(String[] spectrumA, String[] prob, String[] check2) {
       collocates += spec2[0] + " " + spec2[1] + ",";
     }
   }
-  String kernelsentence = join(spec, " ");
-  String[] collocatesA = split(collocates, ",");
-  String[] kernelsentenceA = split(kernelsentence, " ");
+  return collocates;
+}
+String[] collocate_spec2(String[] spectrumA, String[] spec) {
+  String collocates = "";
+  String[] spec2 = new String[0];
+  for (int count = 0; count < spectrumA.length-2; count++) {
+    float r = random(spectrumA.length-2);
+    int xx = round(r);
+    spec2 = split(spectrumA[xx], " ");
+    if (spec[0].equals(spec2[0]) == true) {
+      collocates += spec2[0] + " " + spec2[1] + ",";
+    }
+  }
+  return spec2;
+}
+String[] task_AC(String[] spectrumA, String[] prob) {
+  String[] spec = new String[0];
+  for (int count = 0; count < searchlengthInit; count++) {
+    float r = random(spectrumA.length-1);
+    int xx = round(r);
+    spec = split(spectrumA[xx], " ");
+    if (int(prob[xx]) > 20 ) {
+      break;
+    }
+  }
+  return spec;
+}
+String[] sentencesCombined(String[] collocatesA, String[] spectrumA, String[] spec2, String[] kernelsentenceA ) {
   String sentence1 = "", sentence2 = "";
   for (int count = 0; count < collocatesA.length-1; count++) {
     float r = random(collocatesA.length-1);
@@ -105,11 +121,44 @@ String decide(String[] spectrumA, String[] prob, String[] check2) {
       sentence2 += spec2[1] + ",";
     }
   }
-  String[] sentence1A = split(sentence1, ",");
-  String[] sentence2A = split(sentence2, ",");
-  float r = random(sentence1A.length-1);
-  int random = round(r);
-  String spectrumout = kernelsentence + " " + sentence1A[random];
+  String[] sentenceCombined = split(sentence1+"::"+sentence2, "::");
+  return sentenceCombined;
+}
+String decide(String[] spectrumA, String[] prob, String[] check2) {
+  String spectrumout = "";
+  boolean exit = false, exit2 = false, exit3 = false, exit4 = false, exit5 = false;
+  for (String[] spec = task_AC(spectrumA, prob); exit == false; ) {
+    String[] spec2 = new String[0];
+    for (spec2 = collocate_spec2(spectrumA, spec); exit2 == false; ) {
+      // recogniser
+      exit2 = true;
+    }
+    String collocates = "";
+    for (collocates = collocate(spectrumA, spec); exit3 == false; ) {
+      // recogniser
+      exit3 = true;
+    }
+    String[] kernelsentenceA = new String[0];
+    String kernelsentence = ""; 
+    for (kernelsentence = join(task_AC(spectrumA, prob), " "); exit4 == false; ) {
+      kernelsentenceA = split(kernelsentence, " ");
+      // recogniser
+      exit4 = true;
+    }
+    String[] collocatesA = split(collocates, ",");
+    for (String[] sentences = sentencesCombined(collocatesA, spectrumA, spec2, kernelsentenceA); exit5 == false; ) {
+      //output
+      String[] sentence1A = split(sentences[0], ",");
+      String[] sentence2A = split(sentences[1], ",");
+      float r = random(sentence1A.length-1);
+      int random = round(r);
+      spectrumout = kernelsentence + " " + sentence1A[random];
+      exit5 = true;
+    }
+    exit = true;
+  }
+
+
   return spectrumout;
 }
 String generate(String spectrum, String[] loopA, String full) {
@@ -120,8 +169,8 @@ String generate(String spectrum, String[] loopA, String full) {
       float r = random(loopA.length-1);
       int x = round(r);
       if (loopA[x] != null ) {
-        if (full.indexOf(eny[j] + " " + loopA[x] + " ") > -1 && full.indexOf(" " + loopA[x] + " " + eny[j+1]) > -1 && loop.indexOf("\n" + eny[j] + "\n") == -1 && loop.indexOf("\n" + eny[j+1] + "\n") == -1 && full.indexOf(eny[j] + " " + eny[j+1]) == -1) {
-          spectrum = spectrum.replace(eny[j] + " " + eny[j+1] + " ", eny[j] + " " + loopA[x] + " " + eny[j+1] + " ");
+        if (full.indexOf(eny[j] + " " + loopA[x] + " ") > -1 && full.indexOf(" " + loopA[x] + " " + eny[j+1]) > -1) {
+          spectrum = spectrum.replace(eny[j] + " " + eny[j+1] + " ", eny[j] + " " + loopA[x] + "^^" + eny[j+1] + " ");
           break;
         }
       }
