@@ -12,12 +12,11 @@
 
 PrintWriter outputx;
 String resource = "exp.txt";
-String rules = "exp.txt";
+String rules = "reason.txt";
 String output = "";
 String txt = "";
 void setup()
 {
-  //Load vocabulary
   int count = 0;
   String[]vocabproc;
   String vocabsyn = "";
@@ -35,15 +34,9 @@ void setup()
   }
   outputx = createWriter("vocab.txt");
   outputx.println(vocabsyn);
-  outputx.flush();
   outputx.close();
-  //Load rules
-  String str = "";
   String[]KB = loadStrings(rules);
-  for (int i = 0; i < KB.length; i++)
-  {
-    str += KB[i];
-  }
+  String str = join(KB, "");
   String[]enx = split(str, " ");
   String[]vocabprep = vocabsyn.split(":::::");
   for (int x = 0; x < enx.length; x++)
@@ -59,35 +52,16 @@ void setup()
   }
   outputx = createWriter("rules.txt");
   outputx.println(txt);
-  outputx.flush();
   outputx.close();
-  //load resource
   str = "";
-  KB = loadStrings(resource);
-  for (int i = 0; i < KB.length; i++)
-  {
-    str += KB[i];
-  }
-  String[]en = str.split(" ");
   String[]cat = txt.split(",");
   for (int b = 0; b != cat.length-2; b++)
   {
-    //inference rules
-    if (int (cat[b]) >= 0) {
-      for (int i = round(random(en.length-1)); i < en.length-2; i++)
-      {
-        if (vocabprep[int (cat[b])].indexOf(" " + en[i] + " ") > -1)
-        {
-          output += en[i] + " ";
-          break;
-        }
-      }
-    }
+    String[] words = split(vocabprep[int (cat[b])], " ");
+    output += words[round(random(words.length-1))] + " ";
   }
-  //Save to file
   outputx = createWriter("output.txt");
   outputx.println(output);
-  outputx.flush();
   outputx.close();
   exit();
 }
