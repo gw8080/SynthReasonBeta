@@ -15,6 +15,7 @@ String resource = "exp.txt";
 String rules = "reason.txt";
 String output = "";
 String txt = "";
+int size = 1000;
 void setup()
 {
   int count = 0;
@@ -45,7 +46,7 @@ void setup()
     {
       if (vocabprep[y].indexOf(" " + enx[x] + " ") > -1)
       {
-        txt += y + ",";
+        txt += y + ":" + x + ",";
         break;
       }
     }
@@ -55,10 +56,13 @@ void setup()
   outputx.close();
   str = "";
   String[]cat = txt.split(",");
-  for (int b = 0; b != cat.length-2; b++)
+  for (int n = 0; n != cat.length-1; n++)
   {
-    String[] words = split(vocabprep[int (cat[b])], " ");
-    output += words[round(random(words.length-1))] + " ";
+    String[] words = split(vocabprep[int (split(cat[n], ":")[0])], " ");
+    String[] word = loadStrings("node/" + words[round(random(words.length-1))] + ".txt");
+    if (word != null) {
+      output += words[round(random(words.length-1))] + " " + word[round(random(word.length-1))] + " ";
+    }
   }
   outputx = createWriter("output.txt");
   outputx.println(output);

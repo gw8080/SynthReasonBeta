@@ -1,5 +1,5 @@
 PrintWriter outputx;
-String resource = "exp.txt";
+String resource = "uber.txt";
 void setup()
 {
   String voc = "";
@@ -20,7 +20,7 @@ void setup()
   for (int x = 1; x < words.length-1; x++) {
     list[num] = "";
     for (int y = 1; y < knowledge.length-20; y++) {
-      if (words[x].equals(knowledge[y]) == true && knowledge[y+1].length() > 4) {
+      if (words[x].equals(knowledge[y]) == true) {
         list[num] += knowledge[y+1] + "\n";
         listName[num] = words[x];
       }
@@ -30,6 +30,10 @@ void setup()
   for (int x = 0; x < list.length; x++) {
     if (list[x] != null) {
       outputx = createWriter("node/" + x + ".txt");
+      outputx.print(list[x]);
+      outputx.flush();
+      outputx.close();
+      outputx = createWriter("node/" + listName[x] + ".txt");
       outputx.print(list[x]);
       outputx.flush();
       outputx.close();
