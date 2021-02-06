@@ -21,7 +21,7 @@ void setup()
   int count = 0;
   String[]vocabproc;
   String vocabsyn = "";
-  for (count = 0; count < 4000; count++)
+  for (count = 0; count < 8000; count++)
   {
     vocabproc = loadStrings("node/" + count + ".txt");
     if (vocabproc != null)
@@ -59,8 +59,9 @@ void setup()
   {
     String[] words = split(vocabprep[int (split(cat[n], ":")[0])], " ");
     String[] word = loadStrings("node/" + words[round(random(words.length-1))] + ".txt");
-    if (word != null) {
-      output += words[round(random(words.length-1))] + " " + word[round(random(word.length-1))] + " ";
+    String[] frame = loadStrings("node/" + enx[int (split(cat[n], ":")[1])] + ".txt");
+    if (word != null && frame != null) {
+      output += frame[round(random(frame.length-1))] + " " + words[round(random(words.length-1))] + " " + word[round(random(word.length-1))] + " ";
     }
   }
   outputx = createWriter("output.txt");
