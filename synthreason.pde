@@ -61,7 +61,7 @@ void setup()
     String[] word = loadStrings("node/" + words[round(random(words.length-1))] + ".txt");
     String[] frame = loadStrings("node/" + enx[int (split(cat[n], ":")[1])] + ".txt");
     if (word != null && frame != null) {
-      output += frame[round(random(frame.length-1))] + " " + words[round(random(words.length-1))] + " " + word[round(random(word.length-1))] + " ";
+      output += words[round(random(words.length-1))] + " " +  frame[round(random(frame.length-1))]  + " " + word[round(random(word.length-1))] + " ";
     }
   }
   outputx = createWriter("output.txt");
