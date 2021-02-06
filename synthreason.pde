@@ -54,7 +54,6 @@ void setup()
   outputx = createWriter("rules.txt");
   outputx.println(txt);
   outputx.close();
-  str = "";
   String[]cat = txt.split(",");
   for (int n = 0; n != cat.length-1; n++)
   {
