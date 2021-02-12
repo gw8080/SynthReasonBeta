@@ -19,16 +19,18 @@ int threshold = 100;
 void setup()
 {
   String[] res = split(join(loadStrings(resource), ""), ".");
+  String resStr = join(loadStrings(resource), "");
   String[] problem = split(join(loadStrings(problemF), "\n"), "\n");
   String filter = join(loadStrings(filterF), "\n");
+  String[] filterA = loadStrings(filterF);
   outputx = createWriter("output.txt");
   while (true) {
-    String output = returnWords(problem, res, filter); 
+    String output = returnWords(problem, res, resStr, filter, filterA); 
     outputx.println(output);
     outputx.flush();
   }
 }
-String returnWords(String[] problem, String[] res, String filter) {
+String returnWords(String[] problem, String[] res, String resStr, String filter, String[] filterA) {
   String output = "";
   boolean exit = false;
   for (int a = 0; a < 100 && exit == false; a++) {
@@ -46,7 +48,13 @@ String returnWords(String[] problem, String[] res, String filter) {
           stat++;
         }
         if (stat > threshold && oneA.indexOf(funct) > -1 && oneB.indexOf(funct) > -1 && filter.indexOf(testA) == -1 && filter.indexOf(funct) == -1) {
-          output = funct + " is used in contexts of " + testA;
+          output = funct + " is used in context of " + testA;
+          if (oneA.indexOf(funct) < oneA.indexOf(testA) && oneB.indexOf(funct) < oneB.indexOf(testA)) {
+            output += " and " + funct + " preceeds " + testA + " in sentences.";
+          }
+          if (oneA.indexOf(funct) > oneA.indexOf(testA) && oneB.indexOf(funct) > oneB.indexOf(testA)) {
+            output += " and " + testA + " preceeds " + funct + " in sentences. ";
+          }
           exit = true;
         }
       }
