@@ -1,4 +1,4 @@
-/*  //<>//
+/*  //<>// //<>//
  Copyright (C) 2020 George Wagenknecht SynthReason, This program is free
  software; you can redistribute it and/or modify it under the terms of the
  GNU General Public License as published by the Free Software Foundation;
@@ -12,60 +12,44 @@
 
 PrintWriter outputx;
 String resource = "exp.txt";
-String rules = "reason.txt";
+String problemF = "problem.txt";
 String output = "";
-String txt = "";
-int size = 1000;
+int threshold = 100;
 void setup()
 {
-  int count = 0;
-  String[]vocabproc;
-  String vocabsyn = "";
-  for (count = 0; count < 8000; count++)
-  {
-    vocabproc = loadStrings("node/" + count + ".txt");
-    if (vocabproc != null)
-    {
-      String voc = join(vocabproc, " ");
-      if (voc.length() > 0)
-      {
-        vocabsyn += voc + ":::::";
-      }
-    }
-  }
-  outputx = createWriter("vocab.txt");
-  outputx.println(vocabsyn);
-  outputx.close();
-  String[]KB = loadStrings(rules);
-  String str = join(KB, "");
-  String[]enx = split(str, " ");
-  String[]vocabprep = vocabsyn.split(":::::");
-  for (int x = 0; x < enx.length; x++)
-  {
-    for (int y = 0; y < vocabprep.length; y++)
-    {
-      if (vocabprep[y].indexOf(" " + enx[x] + " ") > -1)
-      {
-        txt += y + ":" + x + ",";
-        break;
-      }
-    }
-  }
-  outputx = createWriter("rules.txt");
-  outputx.println(txt);
-  outputx.close();
-  String[]cat = txt.split(",");
-  for (int n = 0; n != cat.length-1; n++)
-  {
-    String[] words = split(vocabprep[int (split(cat[n], ":")[0])], " ");
-    String[] word = loadStrings("node/" + words[round(random(words.length-1))] + ".txt");
-    String[] frame = loadStrings("node/" + enx[int (split(cat[n], ":")[1])] + ".txt");
-    if (word != null && frame != null) {
-      output += words[round(random(words.length-1))] + " " +  frame[round(random(frame.length-1))]  + " " + word[round(random(word.length-1))] + " ";
-    }
-  }
+  String[] res = split(join(loadStrings(resource), ""), ".");
+  String[] problem = split(join(loadStrings(problemF), "\n"), "\n");
+  String filter =join(loadStrings(problemF), "\n");
   outputx = createWriter("output.txt");
-  outputx.println(output);
-  outputx.close();
-  exit();
+  while (true) {
+    String output = returnWords(problem, res, filter); 
+    outputx.println(output);
+    outputx.flush();
+  }
+}
+String returnWords(String[] problem, String[] res, String filter) {
+  String output = "";
+  boolean exit = false;
+  for (int a = 0; a < 100 && exit == false; a++) {
+    String funct = problem[round(random(problem.length-1))];
+    int stat = 0;
+    for (int b = 0; b < 100 && exit == false; b++) {
+      String oneA = res[round(random(res.length-1))];
+      String oneB = res[round(random(res.length-1))];
+      String[] countA = split(oneA, " ");
+      String[] countB = split(oneB, " ");
+      for (int c = 0; c < 100 && exit == false; c++) {
+        String testA = countA[round(random(countA.length-1))];
+        String testB = countB[round(random(countB.length-1))];
+        if ( testA.equals(testB) == true ) {
+          stat++;
+        }
+        if (stat > threshold && oneA.indexOf(funct) > -1 && oneB.indexOf(funct) > -1 && filter.indexOf(testA) == -1) {
+          output = funct + " is used in contexts of " + testA;
+          exit = true;
+        }
+      }
+    }
+  }  
+  return output;
 }
