@@ -13,13 +13,14 @@
 PrintWriter outputx;
 String resource = "exp.txt";
 String problemF = "problem.txt";
+String filterF = "filter.txt";
 String output = "";
 int threshold = 100;
 void setup()
 {
   String[] res = split(join(loadStrings(resource), ""), ".");
   String[] problem = split(join(loadStrings(problemF), "\n"), "\n");
-  String filter =join(loadStrings(problemF), "\n");
+  String filter = join(loadStrings(filterF), "\n");
   outputx = createWriter("output.txt");
   while (true) {
     String output = returnWords(problem, res, filter); 
@@ -44,7 +45,7 @@ String returnWords(String[] problem, String[] res, String filter) {
         if ( testA.equals(testB) == true ) {
           stat++;
         }
-        if (stat > threshold && oneA.indexOf(funct) > -1 && oneB.indexOf(funct) > -1 && filter.indexOf(testA) == -1) {
+        if (stat > threshold && oneA.indexOf(funct) > -1 && oneB.indexOf(funct) > -1 && filter.indexOf(testA) == -1 && filter.indexOf(funct) == -1) {
           output = funct + " is used in contexts of " + testA;
           exit = true;
         }
