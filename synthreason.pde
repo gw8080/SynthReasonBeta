@@ -14,6 +14,7 @@ PrintWriter outputx;
 String resource = "exp.txt";
 String problemF = "problem.txt";
 String filterF = "filter.txt";
+String contextF = "context.txt";
 String output = "";
 int threshold = 100;
 void setup()
@@ -23,14 +24,15 @@ void setup()
   String[] problem = split(join(loadStrings(problemF), "\n"), "\n");
   String filter = join(loadStrings(filterF), "\n");
   String[] filterA = loadStrings(filterF);
+  String[] contextA = loadStrings(contextF);
   outputx = createWriter("output.txt");
   while (true) {
-    String output = returnWords(problem, res, resStr, filter, filterA); 
-    outputx.println(output);
+    String output = returnWords(problem, res, resStr, filter, filterA, contextA); 
+    outputx.print(output);
     outputx.flush();
   }
 }
-String returnWords(String[] problem, String[] res, String resStr, String filter, String[] filterA) {
+String returnWords(String[] problem, String[] res, String resStr, String filter, String[] filterA, String[] context) {
   String output = "";
   boolean exit = false;
   for (int a = 0; a < 100 && exit == false; a++) {
@@ -47,14 +49,19 @@ String returnWords(String[] problem, String[] res, String resStr, String filter,
         if ( testA.equals(testB) == true ) {
           stat++;
         }
-        if (stat > threshold && oneA.indexOf(funct) > -1 && oneB.indexOf(funct) > -1 && filter.indexOf(testA) == -1 && filter.indexOf(funct) == -1) {
-          output = funct + " is used in context of " + testA;
-          if (oneA.indexOf(funct) < oneA.indexOf(testA) && oneB.indexOf(funct) < oneB.indexOf(testA)) {
-            output += " and " + funct + " preceeds " + testA + " in sentences.";
+        if (stat > threshold && oneA.indexOf(funct) > -1 && oneB.indexOf(funct) > -1 && funct.equals(testA) == false && filter.indexOf(testA) == -1 && filter.indexOf(funct) == -1) {
+          boolean exit2 = false;
+          for (int x = 0; x < 100 && exit2 == false; x++) {
+            int rand = round(random(res.length-1));
+            for (int y = 0; y < 100 && exit2 == false; y++) {
+              int rand2 = round(random(context.length-1));
+              if (res[rand].indexOf(funct) > -1 && res[rand].indexOf(context[rand2]) > -1 && res[rand].indexOf(testA) > -1) {
+                output = funct + " is used in " + context[rand2] + " of " + testA + "\n";
+                exit2 = true;
+              }
+            }
           }
-          if (oneA.indexOf(funct) > oneA.indexOf(testA) && oneB.indexOf(funct) > oneB.indexOf(testA)) {
-            output += " and " + testA + " preceeds " + funct + " in sentences. ";
-          }
+
           exit = true;
         }
       }
