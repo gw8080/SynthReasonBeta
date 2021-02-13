@@ -17,6 +17,7 @@ String filterF = "filter.txt";
 String contextF = "context.txt";
 String output = "";
 int threshold = 100;
+int scanLength = 500;
 void setup()
 {
   String[] res = split(join(loadStrings(resource), ""), ".");
@@ -35,15 +36,15 @@ void setup()
 String returnWords(String[] problem, String[] res, String resStr, String filter, String[] filterA, String[] context) {
   String output = "";
   boolean exit = false;
-  for (int a = 0; a < 100 && exit == false; a++) {
+  for (int a = 0; a < scanLength && exit == false; a++) {
     String funct = problem[round(random(problem.length-1))];
     int stat = 0;
-    for (int b = 0; b < 100 && exit == false; b++) {
+    for (int b = 0; b < scanLength && exit == false; b++) {
       String oneA = res[round(random(res.length-1))];
       String oneB = res[round(random(res.length-1))];
       String[] countA = split(oneA, " ");
       String[] countB = split(oneB, " ");
-      for (int c = 0; c < 100 && exit == false; c++) {
+      for (int c = 0; c < scanLength && exit == false; c++) {
         String testA = countA[round(random(countA.length-1))];
         String testB = countB[round(random(countB.length-1))];
         if ( testA.equals(testB) == true ) {
@@ -51,9 +52,9 @@ String returnWords(String[] problem, String[] res, String resStr, String filter,
         }
         if (stat > threshold && oneA.indexOf(funct) > -1 && oneB.indexOf(funct) > -1 && funct.equals(testA) == false && filter.indexOf(testA) == -1 && filter.indexOf(funct) == -1) {
           boolean exit2 = false;
-          for (int x = 0; x < 100 && exit2 == false; x++) {
+          for (int x = 0; x < scanLength && exit2 == false; x++) {
             int rand = round(random(res.length-1));
-            for (int y = 0; y < 100 && exit2 == false; y++) {
+            for (int y = 0; y < scanLength && exit2 == false; y++) {
               int rand2 = round(random(context.length-1));
               if (res[rand].indexOf(funct) > -1 && res[rand].indexOf(context[rand2]) > -1 && res[rand].indexOf(testA) > -1) {
                 output = funct + " is used in " + context[rand2] + " of " + testA + "\n";
