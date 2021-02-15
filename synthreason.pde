@@ -15,9 +15,10 @@ String resource = "exp.txt";
 String problemF = "problem.txt";
 String filterF = "filter.txt";
 String contextF = "context.txt";
+String useF = "use.txt";
 String output = "";
-int threshold = 100;
-int scanLength = 500;
+int threshold = 50;
+int scanLength = 1000;
 void setup()
 {
   String[] res = split(join(loadStrings(resource), ""), ".");
@@ -26,14 +27,15 @@ void setup()
   String filter = join(loadStrings(filterF), "\n");
   String[] filterA = loadStrings(filterF);
   String[] contextA = loadStrings(contextF);
+  String[] useA = loadStrings(useF);
   outputx = createWriter("output.txt");
   while (true) {
-    String output = returnWords(problem, res, resStr, filter, filterA, contextA); 
+    String output = returnWords(problem, res, resStr, filter, filterA, contextA, useA); 
     outputx.print(output);
     outputx.flush();
   }
 }
-String returnWords(String[] problem, String[] res, String resStr, String filter, String[] filterA, String[] context) {
+String returnWords(String[] problem, String[] res, String resStr, String filter, String[] filterA, String[] context, String[] use) {
   String output = "";
   boolean exit = false;
   for (int a = 0; a < scanLength && exit == false; a++) {
@@ -57,12 +59,16 @@ String returnWords(String[] problem, String[] res, String resStr, String filter,
             for (int y = 0; y < scanLength && exit2 == false; y++) {
               int rand2 = round(random(context.length-1));
               if (res[rand].indexOf(funct) > -1 && res[rand].indexOf(context[rand2]) > -1 && res[rand].indexOf(testA) > -1) {
-                output = funct + " is used in " + context[rand2] + " of " + testA + "\n";
-                exit2 = true;
+                for (int z = 0; z < scanLength && exit2 == false; z++) {
+                  int rand3 = round(random(use.length-1));
+                  if ( res[rand].indexOf(use[rand3]) > -1 ) {
+                    output = funct + " is " + use[rand3] + " in " + context[rand2] + " of " + testA + "\n";
+                    exit2 = true;
+                  }
+                }
               }
             }
           }
-
           exit = true;
         }
       }
