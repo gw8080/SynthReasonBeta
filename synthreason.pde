@@ -17,7 +17,7 @@ String filterF = "filter.txt";
 String contextF = "context.txt";
 String useF = "use.txt";
 String output = "";
-int threshold = 50;
+int threshold = 20;
 int scanLength = 1000;
 void setup()
 {
@@ -62,8 +62,15 @@ String returnWords(String[] problem, String[] res, String resStr, String filter,
                 for (int z = 0; z < scanLength && exit2 == false; z++) {
                   int rand3 = round(random(use.length-1));
                   if ( res[rand].indexOf(use[rand3]) > -1 ) {
-                    output = funct + " is " + use[rand3] + " in " + context[rand2] + " of " + testA + "\n";
-                    exit2 = true;
+                    for (int z2 = 0; z2 < scanLength && exit2 == false; z2++) {
+                      int rand4 = round(random(filterA.length-1));
+                      int rand5 = round(random(filterA.length-1));
+                      int rand6 = round(random(filterA.length-1));
+                      if ( resStr.indexOf(funct + " " + filterA[rand4]) > -1 &&  resStr.indexOf(filterA[rand5] + " " + context[rand2]) > -1 && resStr.indexOf(filterA[rand6] + " " + testA) > -1) {
+                        output = funct + " " + filterA[rand4] + " " + use[rand3] + " " + filterA[rand5] + " " + context[rand2] + " " + filterA[rand6] + " " + testA + "\n";
+                        exit2 = true;
+                      }
+                    }
                   }
                 }
               }
