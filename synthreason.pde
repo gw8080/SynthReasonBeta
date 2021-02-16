@@ -17,11 +17,12 @@ String filterF = "filter.txt";
 String contextF = "context.txt";
 String useF = "use.txt";
 String output = "";
-int threshold = 20;
+int threshold = 5000;
 int scanLength = 1000;
 void setup()
 {
   String[] res = split(join(loadStrings(resource), ""), ".");
+  String[] resA = split(join(loadStrings(resource), ""), " ");
   String resStr = join(loadStrings(resource), "");
   String[] problem = split(join(loadStrings(problemF), "\n"), "\n");
   String filter = join(loadStrings(filterF), "\n");
@@ -35,6 +36,8 @@ void setup()
     outputx.flush();
   }
 }
+
+
 String returnWords(String[] problem, String[] res, String resStr, String filter, String[] filterA, String[] context, String[] use) {
   String output = "";
   boolean exit = false;
@@ -44,6 +47,7 @@ String returnWords(String[] problem, String[] res, String resStr, String filter,
     for (int b = 0; b < scanLength && exit == false; b++) {
       String oneA = res[round(random(res.length-1))];
       String oneB = res[round(random(res.length-1))];
+
       String[] countA = split(oneA, " ");
       String[] countB = split(oneB, " ");
       for (int c = 0; c < scanLength && exit == false; c++) {
@@ -58,7 +62,7 @@ String returnWords(String[] problem, String[] res, String resStr, String filter,
             int rand = round(random(res.length-1));
             for (int y = 0; y < scanLength && exit2 == false; y++) {
               int rand2 = round(random(context.length-1));
-              if (res[rand].indexOf(funct) > -1 && res[rand].indexOf(context[rand2]) > -1 && res[rand].indexOf(testA) > -1) {
+              if (res[rand].indexOf(funct) > -1 && res[rand].indexOf(context[rand2]) > -1) {
                 for (int z = 0; z < scanLength && exit2 == false; z++) {
                   int rand3 = round(random(use.length-1));
                   if ( res[rand].indexOf(use[rand3]) > -1 ) {
