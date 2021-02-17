@@ -17,19 +17,15 @@ void setup()
       String[] sentenceB = split(res[round(random(res.length-1))], " ");
       for (int y = 0; y < sentenceB.length && exit == false; y++) {
         String oneB = sentenceB[y];
-        String[] sentenceC = split(res[round(random(res.length-1))], " ");
-        for (int z = 0; z < sentenceC.length && exit == false; z++) {
-          String oneC = sentenceC[z];
-          if (oneA.length() > 4 && oneB.length() > 4 && resStr.indexOf(oneA + " " + oneB) > -1 && resStr.indexOf(oneA) < resStr.indexOf(oneB) && output.indexOf(oneA + " " + oneB + " " + oneC) == -1) {
-            String[] words = split(output, " ");
-            String check = words[words.length-1];
-            if (words.length > 2) {
-              check = words[words.length-2];
-            }
-            if (resStr.indexOf(check) < resStr.indexOf(oneA)) {
-              output += oneA + " " + oneB + " ";
-              exit = true;
-            }
+        if (oneA.length() > 4 && oneB.length() > 4 && resStr.indexOf(oneA + " " + oneB) > -1 && resStr.indexOf(oneA) < resStr.indexOf(oneB) && output.indexOf(oneA + " " + oneB) == -1) {
+          String[] words = split(output, " ");
+          String check = words[words.length-1];
+          if (words.length > 2) {
+            check = words[words.length-2];
+          }
+          if (resStr.indexOf(check) < resStr.indexOf(oneA)) {
+            output += oneA + " " + oneB + " ";
+            exit = true;
           }
         }
       }
