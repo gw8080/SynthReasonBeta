@@ -1,5 +1,5 @@
 PrintWriter outputx; //<>//
-String resource = "KB.txt";
+String resource = "exp.txt";
 String filterF = "filter.txt";
 int scanLength = 1000;
 void setup()
@@ -23,7 +23,7 @@ void setup()
           if (words.length > 2) {
             check = words[words.length-2];
           }
-          if (res[round(random(res.length-1))].indexOf(check) < resStr.indexOf(oneA)) {
+          if (res[xx].indexOf(check) < resStr.indexOf(oneA)) {
             output += oneA + " " + oneB + " ";
             exit = true;
           }
