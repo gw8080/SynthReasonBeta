@@ -1,16 +1,16 @@
 PrintWriter outputx; //<>//
-String resource = "exp.txt";
+String resource = "KB.txt";
 String filterF = "filter.txt";
-int scanLength = 100;
+int scanLength = 1000;
 void setup()
 {
   String[] res = split(join(loadStrings(resource), ""), ".");
   String resStr = join(loadStrings(resource), "");
   String[] filterA = loadStrings(filterF);
   outputx = createWriter("output.txt");
-  while (true) { 
+  for (int xx= 0; xx < res.length; xx++) { 
     String output = "";
-    String[] sentence = split(res[round(random(res.length-1))], " ");
+    String[] sentence = split(res[xx], " ");
     for (int x = 0; x <  sentence.length; x++) {
       boolean exit = false; 
       String oneA = sentence[x];
@@ -23,7 +23,7 @@ void setup()
           if (words.length > 2) {
             check = words[words.length-2];
           }
-          if (resStr.indexOf(check) < resStr.indexOf(oneA)) {
+          if (res[round(random(res.length-1))].indexOf(check) < resStr.indexOf(oneA)) {
             output += oneA + " " + oneB + " ";
             exit = true;
           }
