@@ -1,12 +1,10 @@
-PrintWriter outputx; //<>// //<>//
-String resource = "exp.txt";
+PrintWriter outputx; //<>//
+String resource = "uber.txt";
 String filterF = "filter.txt";
-int scanLength = 1000;
 void setup()
 {
   String[] res = split(join(loadStrings(resource), ""), ".");
   String resStr = join(loadStrings(resource), "");
-  String[] filterA = loadStrings(filterF);
   outputx = createWriter("output.txt");
   for (int xx= 0; xx < res.length; xx++) { 
     String output = "";
@@ -24,20 +22,9 @@ void setup()
             check = words[words.length-2];
           }
           if (res[xx].indexOf(check) < resStr.indexOf(oneA)) {
-            output += sentence[x-1] + " " + oneA + " " + oneB + " " + sentence[y+1] + " " ;
+            output += sentence[x-1] + " " + oneA + " " + oneB + " " + sentenceB[y+1] + " " ;
             exit = true;
           }
-        }
-      }
-    }
-    String[] words = split(output, " ");
-    boolean exit = false; 
-    for (int a = 0; a < words.length-1 && exit == false; a++) {
-      for (int z = 0; z < scanLength && exit == false; z++) {
-        int rand = round(random(filterA.length-1));
-        if (resStr.indexOf(words[a] + " " + filterA[rand] + " " + words[a+1]) > -1) {
-          output = output.replace(words[a] + " " + words[a+1], words[a] + " " + filterA[rand]+ " " + words[a+1]);
-          exit = true;
         }
       }
     }
