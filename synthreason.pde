@@ -21,7 +21,7 @@ void setup()
           if (words.length > 2) {
             check = words[words.length-2];
           }
-          if (res[xx].indexOf(check) < resStr.indexOf(oneA)) {
+          if (res[xx].indexOf(check) < resStr.indexOf(check + " " + sentence[x-1])) {
             output += sentence[x-1] + " " + oneA + " " + oneB + " " + sentenceB[y+1] + " " ;
             exit = true;
           }
