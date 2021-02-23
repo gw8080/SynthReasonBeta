@@ -14,6 +14,7 @@ PrintWriter outputx;
 PrintWriter debug;
 String resource = "exp.txt";// knowledgebase
 String rules = "reason.txt";// rules
+String search = "existence";// search
 String output = "";
 String txt = "";
 void setup()
@@ -54,7 +55,7 @@ void setup()
   String[] KB = loadStrings(resource);
   for (int i = 0; i < KB.length; i++)
   {
-    if (KB[i].indexOf(split(KB[0], " ")[round(random(split(KB[0], " ").length-1))]) > -1) {
+    if (KB[i].indexOf(split(KB[0], " ")[round(random(split(KB[0], " ").length-1))]) > -1 || KB[i].indexOf(search) >-1) {
       str += KB[i];// load working memory
     }
   }
