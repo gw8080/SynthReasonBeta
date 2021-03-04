@@ -1,11 +1,10 @@
 PrintWriter outputx;
 String resource = "exp.txt";// knowledgebase
-String resourceB = "exp.txt";// knowledgebase
 void setup()
 {
   String test = join(loadStrings(resource), "");
   String output = "", check = "";
-  String[] tokenText = split(join(loadStrings(resourceB), ""), " ");
+  String[] tokenText = split(join(loadStrings(resource), ""), " ");
   for (int a = 0; a < tokenText.length; a++) {
     int x = round(random(test.length()-1));
     if (test.indexOf(tokenText[a] + " ", x) > -1) {
