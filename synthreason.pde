@@ -2,16 +2,16 @@ PrintWriter outputx;
 PrintWriter debug;
 int scanLength = 150;
 int lines = 150;
-String resource = "reason.txt";
+String resource = "exp.txt";
 void setup()
 {
-  String[] KB = split(join(loadStrings(resource), ""), " ");
+  String[] KB = loadResource(resource);
   String[] contextA = loadStrings("context.txt");
   String run = contextA[round(random(contextA.length-1))] + " ";
   outputx = createWriter("output.txt");
   for (int x = 0; x < lines; x++) {
     for (int n = 1; n < scanLength; n++) {
-      String outputC = select(KB, split(run, " ")[split(run, " ").length-2], n, findLocation(KB, select(KB, split(run, " ")[round(random(split(run, " ").length-1))], 0, 0)));
+      String outputC = select(KB, split(run, " ")[split(run, " ").length-2], n, findLocation(KB, select(KB, split(run, " ")[round(random(split(run, " ").length-2))], 0, 0)));
       if (outputC.length() > 0) {
         run += outputC + " ";
       }
@@ -43,4 +43,19 @@ int findLocation(String[] KB, String search) {
     }
   }
   return output;
+}
+String[] loadResource(String resource)
+{
+  String[] KB = loadStrings(resource);
+  String str2 = join(KB, "");
+  String[] eliminate2 = {"[", "]", ",", "\"", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "(", ")", "\'", "?"};
+  for (int k = 0; k < eliminate2.length; k++) {
+    str2 = str2.replace(eliminate2[k], "");
+  }
+  while (str2.indexOf(".") > -1) {
+    str2 = str2.replace(".", " ");
+  }
+  str2 = str2.toLowerCase();
+  String[] str3 = split(str2, " ");
+  return str3;
 }
