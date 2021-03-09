@@ -12,10 +12,12 @@
 
 PrintWriter outputx;
 PrintWriter debug;
-String resource = "exp.txt";// knowledgebase
+String resource = "reason.txt";// knowledgebase
 String rules = "reason.txt";// rules
 String output = "";
 String txt = "";
+String search = "reason";
+int memTries = 50;
 void setup()
 {
   int count = 0;
@@ -56,38 +58,45 @@ void setup()
     }
     txt += "::";
   }
-  String str = join(loadStrings(resource), "");
-  String[]en = split(str, " ");
+  String res = join(loadStrings(resource), "");
+
   String[]catfull = split(txt, "::");
-
-
-
   outputx = createWriter("output.txt");
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
   {
     String[]cat = split(catfull[catPos2], ",");
+    String outputprep = "";
+    int memTrig = 0;
     for (int catPos = 0; catPos != cat.length-1; catPos++)
     {
-      for (int enPos = round(random(en.length)); enPos < en.length-2; enPos++)
-      {
-        if (vocabprep[int (cat[catPos])].indexOf("\n" + en[enPos] + "\n") > -1) {
-          output += en[enPos] + " " ; 
-          enPos = round(random(en.length));
-          break;
+      if (split(vocabprep[int (cat[catPos])], "\n").length > 50) { 
+        int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
+        for (int y = 0; y < memTries; y++) {
+          if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
+            outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " " ;
+            String[] KB = loadStrings(resource);
+            if (memTrig == 0) {
+              for (int i = 1; i < KB.length-2; i++)
+              {
+                if (KB[i].indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
+                  res += KB[i-1]+KB[i]+KB[i+1];// load working memory
+                }
+              }
+              memTrig++;
+            }
+            break;
+          }
+          x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
         }
       }
+      if (split(vocabprep[int (cat[catPos])], "\n").length < 20) { 
+        outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " " ;
+      }
     }
-    output += ".\n";
+    output += outputprep + ".\n";
   }
   outputx.println(output);
   outputx.flush();
   outputx.close();
   exit();
-}
-boolean select(String[] en, String[] vocabprep, String[] cat, int enPos, int catPos, int relPos) {
-  boolean state = false;
-  if (vocabprep[int (cat[catPos+relPos])].indexOf("\n" + en[enPos+relPos] + "\n") > -1) {
-    state = true;
-  }
-  return state;
 }
