@@ -12,7 +12,7 @@
 
 PrintWriter outputx;
 PrintWriter debug;
-String resource = "reason.txt";// knowledgebase
+String resource = "exp.txt";// knowledgebase
 String rules = "reason.txt";// rules
 String output = "";
 String txt = "";
@@ -59,8 +59,8 @@ void setup()
     txt += "::";
   }
   String res = join(loadStrings(resource), "");
-
   String[]catfull = split(txt, "::");
+  String[] KB = loadStrings(resource);
   outputx = createWriter("output.txt");
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
   {
@@ -74,7 +74,7 @@ void setup()
         for (int y = 0; y < memTries; y++) {
           if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
             outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " " ;
-            String[] KB = loadStrings(resource);
+
             if (memTrig == 0) {
               for (int i = 1; i < KB.length-2; i++)
               {
