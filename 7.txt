@@ -1,27 +1,15 @@
-I
-me
-you
-he
-him
-she
-this
-that
-these
-those
-mine
-yours
-his
-who
-what
-which
-myself
-yourself
-himself
-another
-much
-nobody
-few
-such
-who
-whom
-which
+as a result
+as a consequence
+in addition
+anyway
+furthermore
+additionally
+next
+similarly
+unlike
+indeed
+nevertheless
+moreover
+rather
+otherwise
+in the same way

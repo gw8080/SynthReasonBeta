@@ -1,22 +1,21 @@
-expect
-plan
-prospective
-recommend
-schedule
-suggest
-advance
-advise
-arrange
-consider
-contemplate
-design
-determine
-intende
-move
-press
-purpose
-scheme
-submit
-urge
-volunteer
-contingent
+also
+alone
+at least
+even
+either
+exactly
+extremely
+in particular
+mainly
+neither
+nor
+not only
+notably
+predominantly
+purely
+quite
+simply
+solely
+terribly
+too
+very

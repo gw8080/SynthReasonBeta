@@ -1,0 +1,22 @@
+today
+tomorrow
+yesterday
+daily
+weekly
+never
+rarely
+sometimes
+often
+usually
+always
+now
+later
+soon
+last spring
+since june
+for decades
+before
+after
+generally
+still
+yet
