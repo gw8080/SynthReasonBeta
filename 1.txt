@@ -51,9 +51,6 @@ ashamed
 astonishing
 attractive
 average
-Adjectives that Start with B
-Here is the list of adjectives that start with letter B:
-
 bad
 barbarous
 bashful
@@ -104,7 +101,6 @@ bumpy
 burly
 bustling
 busy
-Adjectives that Start with C
 cagey
 calculating
 callous
@@ -180,7 +176,6 @@ curved
 curvy
 cut
 cynical
-Adjectives that Start with D
 daffy
 daily
 damaged
@@ -231,7 +226,6 @@ dizzy
 drab
 drained
 dull
-Adjectives that Start with E
 eager
 early
 earsplitting
@@ -274,7 +268,6 @@ excited
 exhilarated
 extensive
 exuberant
-Adjectives that Start with F
 fabulous
 faded
 faint
@@ -316,7 +309,6 @@ frothy
 frustrating
 funny
 fuzzy
-Adjectives that Start with G
 gabby
 gainful
 gamy
@@ -351,7 +343,6 @@ gritty
 grotesque
 grubby
 grumpy
-Adjectives that Start with H
 habitual
 half
 hallowed
@@ -404,7 +395,6 @@ hushed
 husky
 hypnotic
 hysterical
-Adjectives that Start with I
 icky
 icy
 ideal
@@ -446,7 +436,6 @@ irate
 irritable
 irritating
 itchy
-Adjectives that Start with J
 jaded
 jagged
 jazzy
@@ -460,7 +449,6 @@ juicy
 jumbled
 jumpy
 juvenile
-Adjectives that Start with K
 kaput
 keen
 kind
@@ -469,7 +457,6 @@ kindly
 knotty
 knowing
 known
-Adjectives that Start with L
 labored
 lackadaisical
 lacking
@@ -517,7 +504,6 @@ lush
 luxuriant
 lying
 lyrical
-Adjectives that Start with M
 macabre
 macho
 maddening
@@ -577,7 +563,6 @@ murky
 mushy
 mute
 mysterious
-Adjectives that Start with N
 naive
 nappy
 narrow
@@ -615,7 +600,6 @@ numberless
 numerous
 nutritious
 nutty
-Adjectives that Start with O
 oafish
 obedient
 obeisant
@@ -644,7 +628,6 @@ ossified
 outgoing
 outrageous
 outstanding
-Adjectives that Start with P
 painful
 painstaking
 pale
@@ -669,7 +652,6 @@ prickly
 proud
 pungent
 puny
-Adjectives that Start with Q
 quack
 quaint
 quarrelsome
@@ -680,7 +662,6 @@ quiet
 quirky
 quixotic
 quizzical
-Adjectives that Start with R
 rabid
 racial
 ragged
@@ -710,7 +691,6 @@ rotten
 rotund
 rough
 round
-Adjectives that Start with S
 sable
 sad
 safe
@@ -776,7 +756,6 @@ superficial
 superior
 swanky
 sweet
-Adjectives that Start with T
 taboo
 tacit
 tacky
@@ -810,9 +789,6 @@ tricky
 trite
 troubled
 twitterpated
-Adjectives that Start with U
-Here is the list of adjectives that start with letter U:
-
 ubiquitous
 ugliest
 ugly
@@ -853,7 +829,6 @@ useless
 utopian
 utter
 uttermost
-Adjectives that Start with V
 vacuous
 vagabond
 vague
@@ -876,7 +851,6 @@ voiceless
 volatile
 voracious
 vulgar
-Adjectives that Start with W
 wacky
 waggish
 waiting
@@ -923,13 +897,11 @@ wrathful
 wretched
 wrong
 wry
-Adjectives that Start with Y
 yellow
 yielding
 young
 youthful
 yummy
-Adjectives that Start with Z
 zany
 zealous
 zippy
