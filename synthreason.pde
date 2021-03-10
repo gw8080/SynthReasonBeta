@@ -12,12 +12,12 @@
 
 PrintWriter outputx;
 PrintWriter debug;
-String resource = "exp.txt";// knowledgebase
+String resource = "reason.txt";// knowledgebase
 String rules = "reason.txt";// rules
 String output = "";
 String txt = "";
 String search = "reason";
-int memTries = 50;
+int memTries = 500;
 void setup()
 {
   int count = 0;
@@ -67,6 +67,13 @@ void setup()
     String[]cat = split(catfull[catPos2], ",");
     String outputprep = "";
     int memTrig = 0;
+    res = "";
+    for (int i = 1; i < KB.length-2; i++)
+    {
+      if (KB[i].indexOf(search) > -1) {
+        res += KB[i-1]+KB[i]+KB[i+1];// load working memory
+      }
+    }
     for (int catPos = 0; catPos != cat.length-1; catPos++)
     {
       if (split(vocabprep[int (cat[catPos])], "\n").length > 50) { 
