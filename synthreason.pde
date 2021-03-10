@@ -12,11 +12,11 @@
 
 PrintWriter outputx;
 PrintWriter debug;
-String resource = "reason.txt";// knowledgebase
+String resource = "exp.txt";// knowledgebase
 String rules = "reason.txt";// rules
 String output = "";
 String txt = "";
-String search = "reason";
+String seedMem = "reason";
 int memTries = 500;
 void setup()
 {
@@ -70,7 +70,7 @@ void setup()
     res = "";
     for (int i = 1; i < KB.length-2; i++)
     {
-      if (KB[i].indexOf(search) > -1) {
+      if (KB[i].indexOf(seedMem) > -1) {
         res += KB[i-1]+KB[i]+KB[i+1];// load working memory
       }
     }
@@ -83,6 +83,7 @@ void setup()
             outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " " ;
 
             if (memTrig == 0) {
+              res = "";
               for (int i = 1; i < KB.length-2; i++)
               {
                 if (KB[i].indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
