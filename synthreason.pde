@@ -20,7 +20,7 @@ void setup()
   String resource = "reason.txt";// knowledgebase
   String rules = "reason.txt";// rules
   String allWords = "words.txt";// rules
-  String vocabsyn = loadVocabFiles(25);
+  String vocabsyn = loadVocabFiles(30);
   String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
   //vocabsyn += unknownWords + ":::::";
   String[]vocabprep = vocabsyn.split(":::::");
