@@ -22,7 +22,7 @@ void setup()
   String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(25);
   String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
-  vocabsyn += unknownWords + ":::::";
+  //vocabsyn += unknownWords + ":::::";
   String[]vocabprep = vocabsyn.split(":::::");
   String rulesReady = processRules(vocabprep, rules);
   String[]catfull = split(rulesReady, "::");
