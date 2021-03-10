@@ -40,19 +40,10 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
   {
     String[]cat = split(catfull[catPos2], ",");
     String outputprep = "";
-    String res = "";
-    String[] KB = split(join(loadStrings(resource), ""), ".");
-    for (int i = 1; i < KB.length-2; i++)
-    {
-      if (KB[i].indexOf(split(KB[i], " ")[0]) > -1) {
-        res += KB[i-1]+KB[i]+KB[i+1];// load working memory
-      }
-    }
+    String res = join(loadStrings(resource), "");
+
     for (int catPos = 0; catPos != cat.length-1; catPos++)
     {
-      if (join(cat, "").indexOf("?") > -1) {
-        break;
-      }
       if (split(vocabprep[int (cat[catPos])], "\n").length > vocabScan) { 
         int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
         for (int y = 0; y < memTries; y++) {
