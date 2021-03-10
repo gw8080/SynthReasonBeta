@@ -237,7 +237,6 @@ form
 frame
 freeze
 fry
-list of verbs (g – o)
 gain
 gap
 gather
@@ -376,7 +375,6 @@ ought
 overcome
 owe
 own
-list of verbs (p-t)
 pack
 paint
 park
@@ -613,7 +611,6 @@ try
 turn
 twist
 type
-list of verbs (u,v)
 understand
 upset
 use

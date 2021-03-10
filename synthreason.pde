@@ -12,18 +12,84 @@
 
 PrintWriter outputx;
 PrintWriter debug;
-String resource = "exp.txt";// knowledgebase
-String rules = "reason.txt";// rules
-String output = "";
-String txt = "";
-String seedMem = "reason";
-int memTries = 500;
 void setup()
 {
+  String output = "";
+  int memTries = 500;
+  int vocabScan = 50;
+  String resource = "reason.txt";// knowledgebase
+  String rules = "reason.txt";// rules
+  String allWords = "words.txt";// rules
+  String vocabsyn = loadVocabFiles(25);
+  String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
+  vocabsyn += unknownWords + ":::::";
+  String[]vocabprep = vocabsyn.split(":::::");
+  String rulesReady = processRules(vocabprep, rules);
+  String[]catfull = split(rulesReady, "::");
+  output = processSentences(catfull, resource, vocabprep, memTries, vocabScan);
+  outputx = createWriter("output.txt");
+  outputx.println(output);
+  outputx.flush();
+  outputx.close();
+  exit();
+}
+
+String processSentences(String[] catfull, String resource, String[] vocabprep, int memTries, int vocabScan) {
+  String output = "";
+  for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
+  {
+    String[]cat = split(catfull[catPos2], ",");
+    String outputprep = "";
+    String res = "";
+    String[] KB = split(join(loadStrings(resource), ""), ".");
+    for (int i = 1; i < KB.length-2; i++)
+    {
+      if (KB[i].indexOf(split(KB[i], " ")[0]) > -1) {
+        res += KB[i-1]+KB[i]+KB[i+1];// load working memory
+      }
+    }
+    for (int catPos = 0; catPos != cat.length-1; catPos++)
+    {
+      if (join(cat, "").indexOf("?") > -1) {
+        break;
+      }
+      if (split(vocabprep[int (cat[catPos])], "\n").length > vocabScan) { 
+        int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
+        for (int y = 0; y < memTries; y++) {
+          if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
+            outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " " ;
+            break;
+          }
+          x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
+        }
+      }
+      if (split(vocabprep[int (cat[catPos])], "\n").length < vocabScan) { 
+        outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " " ;
+      }
+    }
+    output += outputprep + ".\n";
+  }
+  return output;
+}
+String loadUnknowns(String vocabsyn, String rules, String resource, String uWords) {
+  String unknownWords = "";
+  String[] testUnknown = loadStrings(uWords);
+  String testResource = join(loadStrings(resource), "");
+  String testRules = join(loadStrings(rules), "");
+  for (int a = 0; a < testUnknown.length; a++) {
+    if (testResource.indexOf(" " + testUnknown[a] + " ") > -1 || testRules.indexOf(" " + testUnknown[a] + " ") > -1) {
+      if (vocabsyn.indexOf("\n" + testUnknown[a] + "\n") == -1) {
+        unknownWords += "\n" + testUnknown[a] + "\n";
+      }
+    }
+  }
+  return unknownWords;
+}
+String loadVocabFiles(int MAX) {
   int count = 0;
   String[]vocabproc;
   String vocabsyn = "";
-  for (count = 0; count < 25; count++)
+  for (count = 0; count < MAX; count++)
   {
     vocabproc = loadStrings(count + ".txt");
     if (vocabproc != null)
@@ -39,12 +105,14 @@ void setup()
       }
     }
   }
+  return vocabsyn;
+}
+String processRules(String[] vocabprep, String rules) { 
+  String txt = "";
   String[]enx = split(join(loadStrings(rules), ""), ".");
-  String[]vocabprep = vocabsyn.split(":::::");
   for (int z = 0; z < enx.length; z++)
   {
     String[]enwords = split(enx[z], " ");
-
     for (int x = 0; x < enwords.length; x++)
     {
       for (int y = 0; y < vocabprep.length; y++)
@@ -58,53 +126,5 @@ void setup()
     }
     txt += "::";
   }
-  String res = join(loadStrings(resource), "");
-  String[]catfull = split(txt, "::");
-  String[] KB = loadStrings(resource);
-  outputx = createWriter("output.txt");
-  for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
-  {
-    String[]cat = split(catfull[catPos2], ",");
-    String outputprep = "";
-    int memTrig = 0;
-    res = "";
-    for (int i = 1; i < KB.length-2; i++)
-    {
-      if (KB[i].indexOf(seedMem) > -1) {
-        res += KB[i-1]+KB[i]+KB[i+1];// load working memory
-      }
-    }
-    for (int catPos = 0; catPos != cat.length-1; catPos++)
-    {
-      if (split(vocabprep[int (cat[catPos])], "\n").length > 50) { 
-        int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
-        for (int y = 0; y < memTries; y++) {
-          if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
-            outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " " ;
-
-            if (memTrig == 0) {
-              res = "";
-              for (int i = 1; i < KB.length-2; i++)
-              {
-                if (KB[i].indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
-                  res += KB[i-1]+KB[i]+KB[i+1];// load working memory
-                }
-              }
-              memTrig++;
-            }
-            break;
-          }
-          x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
-        }
-      }
-      if (split(vocabprep[int (cat[catPos])], "\n").length < 20) { 
-        outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " " ;
-      }
-    }
-    output += outputprep + ".\n";
-  }
-  outputx.println(output);
-  outputx.flush();
-  outputx.close();
-  exit();
+  return txt;
 }
