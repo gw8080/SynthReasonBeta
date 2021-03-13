@@ -22,7 +22,7 @@ void setup()
   String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(30);
   String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
-  vocabsyn += unknownWords;
+  vocabsyn += unknownWords + ":::::";
   String[]vocabprep = vocabsyn.split(":::::");
   String rulesReady = processRules(vocabprep, rules);
   String[]catfull = split(rulesReady, "::");
@@ -73,7 +73,7 @@ String loadUnknowns(String vocabsyn, String rules, String resource, String uWord
   for (int a = 0; a < testUnknown.length; a++) {
     if (testResource.indexOf(" " + testUnknown[a] + " ") > -1 || testRules.indexOf(" " + testUnknown[a] + " ") > -1) {
       if (vocabsyn.indexOf("\n" + testUnknown[a] + "\n") == -1) {
-        unknownWords += testUnknown[a] + ":::::";
+        unknownWords += "\n" + testUnknown[a] + "\n";
       }
     }
   }
