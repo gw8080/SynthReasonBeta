@@ -54,17 +54,8 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
           if (int (cat[catPos]) == 24) {
             outputprep += "is ";
           }
-          if (int (cat[catPos]) == 10) {
-            outputprep += "are ";
-          }
-          if (int (cat[catPos]) == 15) {
-            outputprep += "and ";
-          }
           outputprep += split(vocabprep[int (cat[catPos])], "\n")[x];
-
-
           outputprep += " ";
-
           break;
         }
         x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
