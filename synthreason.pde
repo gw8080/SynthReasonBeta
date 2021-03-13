@@ -50,7 +50,7 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
     {
       int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
       for (int y = 0; y < memTries; y++) {
-        if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
+        if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1 && vocabprep[int (cat[catPos])].length() > 1) {
           if (int (cat[catPos]) == 24) {
             outputprep += "is ";
           }
@@ -70,10 +70,18 @@ String loadUnknowns(String vocabsyn, String rules, String resource, String uWord
   String[] testUnknown = loadStrings(uWords);
   String testResource = join(loadStrings(resource), "");
   String testRules = join(loadStrings(rules), "");
+  String[] suffix = loadStrings("suffix.txt");
   for (int a = 0; a < testUnknown.length; a++) {
-    if (testResource.indexOf(" " + testUnknown[a] + " ") > -1 || testRules.indexOf(" " + testUnknown[a] + " ") > -1) {
+    if (testResource.indexOf(" " + testUnknown[a] + " ") > -1 || testRules.indexOf(" " + testUnknown[a] + " ") > -1 && testUnknown[a].length() > 3) {
       if (vocabsyn.indexOf("\n" + testUnknown[a] + "\n") == -1) {
-        unknownWords += "\n" + testUnknown[a] + "\n";
+        for (int b = 0; b < suffix.length; b++) {
+          if (testUnknown[a].indexOf(suffix[b]) > -1) {
+            if (testResource.indexOf(testResource.substring(0, testResource.indexOf(suffix[b]) )) < testResource.indexOf(testUnknown[a])) {
+              unknownWords += "\n" + testUnknown[a] + suffix[b] + "\n";
+              break;
+            }
+          }
+        }
       }
     }
   }
@@ -111,7 +119,7 @@ String processRules(String[] vocabprep, String rules) {
     {
       for (int y = 0; y < vocabprep.length; y++)
       {
-        if (vocabprep[y].indexOf("\n" + enwords[x] + "\n") > -1)
+        if (vocabprep[y].indexOf(enwords[x] + "\n") > -1)
         {
           txt += y + ",";// load rules
           break;
