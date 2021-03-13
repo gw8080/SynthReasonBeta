@@ -21,7 +21,7 @@ void setup()
   String rules = "reason.txt";// rules
   String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(30);
-  String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
+  // String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
   //vocabsyn += unknownWords + ":::::";
   String[]vocabprep = vocabsyn.split(":::::");
   String rulesReady = processRules(vocabprep, rules);
@@ -38,28 +38,15 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
   String output = "";
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
   {
-    String[]cat = split(catfull[catPos2], ",");
     String outputprep = "";
-    String res = join(loadStrings(resource), "");
-
+    String[]cat = split(catfull[catPos2], ",");  
     for (int catPos = 0; catPos != cat.length-1; catPos++)
     {
-      if (split(vocabprep[int (cat[catPos])], "\n").length > vocabScan) { 
-        int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
-        for (int y = 0; y < memTries; y++) {
-          if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
-            outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " " ;
-            break;
-          }
-          x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
-        }
-      }
-      if (split(vocabprep[int (cat[catPos])], "\n").length < vocabScan) { 
-        outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " " ;
-      }
+      outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " " ;
     }
     output += outputprep + ".\n";
   }
+
   return output;
 }
 String loadUnknowns(String vocabsyn, String rules, String resource, String uWords) {
