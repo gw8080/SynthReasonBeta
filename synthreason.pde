@@ -21,8 +21,8 @@ void setup()
   String rules = "reason.txt";// rules
   String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(30);
-  // String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
-  //vocabsyn += unknownWords + ":::::";
+  String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
+  vocabsyn += unknownWords;
   String[]vocabprep = vocabsyn.split(":::::");
   String rulesReady = processRules(vocabprep, rules);
   String[]catfull = split(rulesReady, "::");
@@ -38,15 +38,40 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
   String output = "";
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
   {
+    String[]cat = split(catfull[catPos2], ",");
     String outputprep = "";
-    String[]cat = split(catfull[catPos2], ",");  
+
+
+
+
+    String res = join(loadStrings(resource), "");
+
     for (int catPos = 0; catPos != cat.length-1; catPos++)
     {
-      outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " " ;
+      int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
+      for (int y = 0; y < memTries; y++) {
+        if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
+          if (int (cat[catPos]) == 24) {
+            outputprep += "is ";
+          }
+          if (int (cat[catPos]) == 10) {
+            outputprep += "are ";
+          }
+          if (int (cat[catPos]) == 15) {
+            outputprep += "and ";
+          }
+          outputprep += split(vocabprep[int (cat[catPos])], "\n")[x];
+
+
+          outputprep += " ";
+
+          break;
+        }
+        x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
+      }
     }
     output += outputprep + ".\n";
   }
-
   return output;
 }
 String loadUnknowns(String vocabsyn, String rules, String resource, String uWords) {
@@ -57,7 +82,7 @@ String loadUnknowns(String vocabsyn, String rules, String resource, String uWord
   for (int a = 0; a < testUnknown.length; a++) {
     if (testResource.indexOf(" " + testUnknown[a] + " ") > -1 || testRules.indexOf(" " + testUnknown[a] + " ") > -1) {
       if (vocabsyn.indexOf("\n" + testUnknown[a] + "\n") == -1) {
-        unknownWords += "\n" + testUnknown[a] + "\n";
+        unknownWords += testUnknown[a] + ":::::";
       }
     }
   }
