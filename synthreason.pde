@@ -15,15 +15,17 @@ PrintWriter debug;
 void setup()
 {
   String output = "";
-  int memTries = 500;
+  int memTries = 5000;
   int vocabScan = 50;
-  String resource = "reason.txt";// knowledgebase
+  String resource = "exp.txt";// knowledgebase
   String rules = "reason.txt";// rules
   String allWords = "words.txt";// rules
-  String vocabsyn = loadVocabFiles(30);
-  String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
-  vocabsyn += unknownWords + ":::::";
+  String vocabsyn = loadVocabFiles(30, resource);
+  //String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
+  //vocabsyn += unknownWords + ":::::";
   String[]vocabprep = vocabsyn.split(":::::");
+
+
   String rulesReady = processRules(vocabprep, rules);
   String[]catfull = split(rulesReady, "::");
   output = processSentences(catfull, resource, vocabprep, memTries, vocabScan);
@@ -40,22 +42,13 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
   {
     String[]cat = split(catfull[catPos2], ",");
     String outputprep = "";
-
-
-
-
     String res = join(loadStrings(resource), "");
-
     for (int catPos = 0; catPos != cat.length-1; catPos++)
     {
       int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
       for (int y = 0; y < memTries; y++) {
-        if (res.indexOf(split(vocabprep[int (cat[catPos])], "\n")[x]) > -1 && vocabprep[int (cat[catPos])].length() > 1) {
-          if (int (cat[catPos]) == 24) {
-            outputprep += "is ";
-          }
-          outputprep += split(vocabprep[int (cat[catPos])], "\n")[x];
-          outputprep += " ";
+        if (res.indexOf(split(outputprep, " ")[split(outputprep, " ").length-1] + " " + split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
+          outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " "; 
           break;
         }
         x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
@@ -66,28 +59,53 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
   return output;
 }
 String loadUnknowns(String vocabsyn, String rules, String resource, String uWords) {
-  String unknownWords = "";
+  String unknownWordsa = "";
+  String unknownWordsb = "";
+  String unknownWordsc = "";
   String[] testUnknown = loadStrings(uWords);
-  String testResource = join(loadStrings(resource), "");
-  String testRules = join(loadStrings(rules), "");
-  String[] suffix = loadStrings("suffix.txt");
+  String testResource = join(loadStrings(resource), "").toLowerCase();
+  String[] suffix = loadStrings("suffixa.txt");
   for (int a = 0; a < testUnknown.length; a++) {
-    if (testResource.indexOf(" " + testUnknown[a] + " ") > -1 || testRules.indexOf(" " + testUnknown[a] + " ") > -1 && testUnknown[a].length() > 3) {
+    if (testResource.indexOf(testUnknown[a]) > -1 && testUnknown[a].length() > 3) {
       if (vocabsyn.indexOf("\n" + testUnknown[a] + "\n") == -1) {
         for (int b = 0; b < suffix.length; b++) {
           if (testUnknown[a].indexOf(suffix[b]) > -1) {
-            if (testResource.indexOf(testResource.substring(0, testResource.indexOf(suffix[b]) )) < testResource.indexOf(testUnknown[a])) {
-              unknownWords += "\n" + testUnknown[a] + suffix[b] + "\n";
-              break;
-            }
+            unknownWordsa += "\n" + testUnknown[a] + "\n";
+            break;
           }
         }
       }
     }
   }
-  return unknownWords;
+  suffix = loadStrings("suffixb.txt");
+  for (int a = 0; a < testUnknown.length; a++) {
+    if (testResource.indexOf(testUnknown[a]) > -1 && testUnknown[a].length() > 3) {
+      if (vocabsyn.indexOf("\n" + testUnknown[a] + "\n") == -1) {
+        for (int b = 0; b < suffix.length; b++) {
+          if (testUnknown[a].indexOf(suffix[b]) > -1) {
+            unknownWordsb += "\n" + testUnknown[a] + "\n";
+            break;
+          }
+        }
+      }
+    }
+  }
+  suffix = loadStrings("suffixc.txt");
+  for (int a = 0; a < testUnknown.length; a++) {
+    if (testResource.indexOf(testUnknown[a]) > -1 && testUnknown[a].length() > 3) {
+      if (vocabsyn.indexOf("\n" + testUnknown[a] + "\n") == -1) {
+        for (int b = 0; b < suffix.length; b++) {
+          if (testUnknown[a].indexOf(suffix[b]) > -1) {
+            unknownWordsc += "\n" + testUnknown[a] + "\n";
+            break;
+          }
+        }
+      }
+    }
+  }
+  return unknownWordsa + ":::::" + unknownWordsb + ":::::" +unknownWordsc + ":::::";
 }
-String loadVocabFiles(int MAX) {
+String loadVocabFiles(int MAX, String resource) {
   int count = 0;
   String[]vocabproc;
   String vocabsyn = "";
@@ -96,7 +114,19 @@ String loadVocabFiles(int MAX) {
     vocabproc = loadStrings(count + ".txt");
     if (vocabproc != null)
     {
-      String voc = join(vocabproc, '\n');
+      String vocabStr = "";
+      String[] load = split(join(loadStrings(resource), "").toLowerCase(), " ");
+      for (int a = 0; a < load.length-1; a++) {
+        for (int b = 0; b < vocabproc.length-1; b++) {
+          if (load[a].equals(vocabproc[b]) == true) {
+            vocabStr += "\n"+ vocabproc[b];
+            break;
+          }
+        }
+      }
+
+      String[] vocabproc2 = split(vocabStr, "\n");
+      String voc = join(vocabproc2, '\n');
       if (voc.length() > 0)
       {
         vocabsyn += voc + ":::::";// load vocabulary
