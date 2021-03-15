@@ -17,8 +17,8 @@ void setup()
   String output = "";
   int memTries = 5000;
   int vocabScan = 50;
-  String resource = "exp.txt";// knowledgebase
-  String rules = "reason.txt";// rules
+  String resource = "cyb.txt";// knowledgebase
+  String rules = "uber.txt";// rules
   String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(30, resource);
   //String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
@@ -29,6 +29,7 @@ void setup()
   String rulesReady = processRules(vocabprep, rules);
   String[]catfull = split(rulesReady, "::");
   output = processSentences(catfull, resource, vocabprep, memTries, vocabScan);
+
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.flush();
