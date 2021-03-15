@@ -47,7 +47,7 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
     {
       int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
       for (int y = 0; y < memTries; y++) {
-        if (res.indexOf(split(outputprep, " ")[split(outputprep, " ").length-1] + " " + split(vocabprep[int (cat[catPos])], "\n")[x]) > -1) {
+        if (res.indexOf(split(outputprep, " ")[split(outputprep, " ").length-1] + " " + split(vocabprep[int (cat[catPos])], "\n")[x]) > x) {
           outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " "; 
           break;
         }
