@@ -52,7 +52,7 @@ String processSentences(String[] catfull, String resource, String[] vocabprep, i
           outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " "; 
           break;
         }
-        x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
+        x = round(random(split(vocabprep[int (cat[catPos])], "\n").length/100))*catPos;
       }
     }
     output += outputprep + ".\n";
