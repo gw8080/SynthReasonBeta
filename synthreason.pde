@@ -17,7 +17,9 @@ void setup()
   String output = "";
   int memTries = 5000;
   int vocabScan = 50;
-  String resource = "cyb.txt";// knowledgebase
+  int matchTries = 100;
+  int matchSuccess = 90;
+  String resource = "exp.txt";// knowledgebase
   String rules = "uber.txt";// rules
   String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(30, resource);
@@ -26,9 +28,12 @@ void setup()
   String[]vocabprep = vocabsyn.split(":::::");
 
 
-  String rulesReady = processRules(vocabprep, rules);
+  String[] rulesArray = processRules(vocabprep, rules);
+  String rulesReady = rulesArray[0];
+  String navReady = rulesArray[1];
   String[]catfull = split(rulesReady, "::");
-  output = processSentences(catfull, resource, vocabprep, memTries, vocabScan);
+  String[]navfull = split(navReady, "::");
+  output = processSentences(catfull, navfull, resource, vocabprep, memTries, vocabScan, matchTries, matchSuccess);
 
   outputx = createWriter("output.txt");
   outputx.println(output);
@@ -37,27 +42,54 @@ void setup()
   exit();
 }
 
-String processSentences(String[] catfull, String resource, String[] vocabprep, int memTries, int vocabScan) {
+String processSentences(String[] catfull, String[] navfull, String resource, String[] vocabprep, int memTries, int vocabScan, int matchTries, int matchSuccess) {
   String output = "";
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
   {
     String[]cat = split(catfull[catPos2], ",");
+
     String outputprep = "";
     String res = join(loadStrings(resource), "");
-    for (int catPos = 0; catPos != cat.length-1; catPos++)
-    {
-      int x = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
-      for (int y = 0; y < memTries; y++) {
-        if (res.indexOf(split(outputprep, " ")[split(outputprep, " ").length-1] + " " + split(vocabprep[int (cat[catPos])], "\n")[x]) > x) {
-          outputprep += split(vocabprep[int (cat[catPos])], "\n")[x] + " "; 
-          break;
+    if (cat.length-1 > 2) {
+      for (int catPos = 0; catPos != cat.length-1; catPos++)
+      {
+        String[]nav = split(navfull[catPos2], ",");
+        int f = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
+        if (StringMatch(join(nav, " "), outputprep+ " " + split(vocabprep[int (cat[catPos])], "\n")[f], " ", matchTries) > matchSuccess) {
+          outputprep += split(vocabprep[int (cat[catPos])], "\n")[f] + " ";
         }
-        x = round(random(split(vocabprep[int (cat[catPos])], "\n").length/100))*catPos;
       }
     }
     output += outputprep + ".\n";
   }
   return output;
+}
+
+int StringMatch(String one, String two, String splitToken, int tries) {
+
+  String[] background = split(one, splitToken);
+  String[] match = split(two, splitToken);
+  int state = 0;
+  for (int a = 0; a < tries; a++) {
+    if (func(background, match, splitToken, round(random(background.length-1)), round(random(match.length-1))) == true) {
+      state++;
+    }
+  }
+  return state;
+}
+
+boolean func(String[] Background, String[] match, String splitToken, int size, int pos) {
+  boolean state = false;
+  String check ="";
+  if (pos+size<Background.length-1 && match.length > size+pos) {
+    for (int a = pos; a < size; a++) {
+      check += match[a] + splitToken;
+    }
+  }
+  if (join(Background, splitToken).indexOf(check) > -1) {
+    state = true;
+  }
+  return state;
 }
 String loadUnknowns(String vocabsyn, String rules, String resource, String uWords) {
   String unknownWordsa = "";
@@ -140,9 +172,11 @@ String loadVocabFiles(int MAX, String resource) {
   }
   return vocabsyn;
 }
-String processRules(String[] vocabprep, String rules) { 
-  String txt = "";
-  String[]enx = split(join(loadStrings(rules), ""), ".");
+String[] processRules(String[] vocabprep, String rules) { 
+  String txt = "", nav = "";
+  String enxStr = join(loadStrings(rules), "").replace(",", "").replace(";", "");
+  String[] enx = split(enxStr, ".");
+
   for (int z = 0; z < enx.length; z++)
   {
     String[]enwords = split(enx[z], " ");
@@ -153,11 +187,16 @@ String processRules(String[] vocabprep, String rules) {
         if (vocabprep[y].indexOf(enwords[x] + "\n") > -1)
         {
           txt += y + ",";// load rules
+          nav += enwords[x] + ",";
           break;
         }
       }
     }
     txt += "::";
+    nav += "::";
   }
-  return txt;
+
+  txt += ";;;;;" + nav;
+
+  return split(txt, ";;;;;");
 }
