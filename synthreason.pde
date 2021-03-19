@@ -19,8 +19,8 @@ void setup()
   int vocabScan = 50;
   int matchTries = 100;
   int matchSuccess = 80;
-  String resource = "exp.txt";// knowledgebase
-  String rules = "uber.txt";// rules
+  String resource = "n.txt";// knowledgebase
+  String rules = "reason.txt";// rules
   String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(30, resource);
   //String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
@@ -53,16 +53,12 @@ String processSentences(String[] catfull, String[] navfull, String resource, Str
     if (cat.length-1 > 2) {
       for (int catPos = 0; catPos != cat.length-1; catPos++)
       {
-        String[]nav = split(navfull[catPos2], ",");
-        int f = round(random(split(vocabprep[int (cat[catPos])], "\n").length-1));
-        if (StringMatch(join(nav, " "), outputprep+ " " + split(vocabprep[int (cat[catPos])], "\n")[f], " ", matchTries) > matchSuccess) {
-          outputprep += split(vocabprep[int (cat[catPos])], "\n")[f] + " ";
-        }
+        outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " ";
       }
     }
     String[] res = split(join(loadStrings(resource), ""), ".");
     for (int x = 0; x < res.length-1; x++) {
-      if (StringMatch(res[x], outputprep, " ", matchTries) >95) {
+      if (StringMatch(outputprep, res[x], " ", matchTries) >20) {
         output += outputprep + ".\n";
         break;
       }
@@ -77,7 +73,7 @@ int StringMatch(String one, String two, String splitToken, int tries) {
   String[] match = split(two, splitToken);
   int state = 0;
   for (int a = 0; a < tries; a++) {
-    if (func(Background, match, splitToken, round(random(match.length-1)), round(random(Background.length-1))) == true) {
+    if (func(Background, match, splitToken, 3, round(random(Background.length-1))) == true) {
       state++;
     }
   }
@@ -92,7 +88,7 @@ boolean func(String[] Background, String[] match, String splitToken, int size, i
       check += match[a] + splitToken;
     }
   }
-  if (join(Background, splitToken).indexOf(check) > -1) {
+  if (join(Background, splitToken).indexOf(check) > -1 && check.length() > 0) {
     state = true;
   }
   return state;
