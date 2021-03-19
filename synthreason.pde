@@ -18,7 +18,7 @@ void setup()
   int memTries = 5000;
   int vocabScan = 50;
   int matchTries = 100;
-  int matchSuccess = 90;
+  int matchSuccess = 80;
   String resource = "exp.txt";// knowledgebase
   String rules = "uber.txt";// rules
   String allWords = "words.txt";// rules
@@ -49,7 +49,7 @@ String processSentences(String[] catfull, String[] navfull, String resource, Str
     String[]cat = split(catfull[catPos2], ",");
 
     String outputprep = "";
-    String res = join(loadStrings(resource), "");
+
     if (cat.length-1 > 2) {
       for (int catPos = 0; catPos != cat.length-1; catPos++)
       {
@@ -60,18 +60,24 @@ String processSentences(String[] catfull, String[] navfull, String resource, Str
         }
       }
     }
-    output += outputprep + ".\n";
+    String[] res = split(join(loadStrings(resource), ""), ".");
+    for (int x = 0; x < res.length-1; x++) {
+      if (StringMatch(res[x], outputprep, " ", matchTries) >95) {
+        output += outputprep + ".\n";
+        break;
+      }
+    }
   }
   return output;
 }
 
 int StringMatch(String one, String two, String splitToken, int tries) {
 
-  String[] background = split(one, splitToken);
+  String[] Background = split(one, splitToken);
   String[] match = split(two, splitToken);
   int state = 0;
   for (int a = 0; a < tries; a++) {
-    if (func(background, match, splitToken, round(random(background.length-1)), round(random(match.length-1))) == true) {
+    if (func(Background, match, splitToken, round(random(match.length-1)), round(random(Background.length-1))) == true) {
       state++;
     }
   }
@@ -81,7 +87,7 @@ int StringMatch(String one, String two, String splitToken, int tries) {
 boolean func(String[] Background, String[] match, String splitToken, int size, int pos) {
   boolean state = false;
   String check ="";
-  if (pos+size<Background.length-1 && match.length > size+pos) {
+  if (pos+size<Background.length-1 && match.length-1 > size+pos) {
     for (int a = pos; a < size; a++) {
       check += match[a] + splitToken;
     }
