@@ -15,7 +15,7 @@ PrintWriter debug;
 void setup()
 {
   String output = "";
-  String resource = "n.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
   String rules = "reason.txt";// rules
   String vocabsyn = loadVocabFiles(30, resource);
   String[]vocabprep = vocabsyn.split(":::::");
@@ -41,7 +41,7 @@ String processSentences(String[] catfull, String resource, String[] vocabprep) {
 String returnSentence(String[] catfull, String resource, String[] vocabprep, int catPos2, int scan) {
   String output = "";
   String[]cat = split(catfull[catPos2], ",");
-  String[] res = split(join(loadStrings(resource), ""), ".");
+  String[] res = split(join(loadStrings(resource), "").replace(",", ""), ".");
   if (cat.length-1 > 2) {
     for (int catPos = 0; catPos < cat.length-2; catPos++)
     {
@@ -61,7 +61,7 @@ String returnWords(String[] res, String[] vocabprep, String[] cat, int catPos, i
       String[] words = split(vocabprep[int (cat[catPos])], "\n");
       for (int loop2 = 0; loop2 < scan && exit == false; loop2++ ) {
         int x2 = round(random(words.length-2));
-        if (res[z].indexOf(words[x2]) > -1 && res[z].indexOf(split(vocabprep[int (cat[catPos+1])], "\n")[x]) > -1 && res[z].indexOf(words[x2]) < res[z].indexOf(split(vocabprep[int (cat[catPos+1])], "\n")[x]) && words[x2].length() > 1 && split(vocabprep[int (cat[catPos+1])], "\n")[x].length() > 1) {
+        if (res[z].indexOf(" " + words[x2] + " ") > -1 && res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") > -1 && res[z].indexOf(" " + words[x2] + " ") < res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") && words[x2].length() > 1 && split(vocabprep[int (cat[catPos+1])], "\n")[x].length() > 1) {
           modulate = words[x2] + " " + split(vocabprep[int (cat[catPos+1])], "\n")[x]+ " ";
           catPos ++;
           exit = true;
