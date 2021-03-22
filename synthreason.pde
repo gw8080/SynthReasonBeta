@@ -10,25 +10,18 @@
  License along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 
-PrintWriter outputx;
-PrintWriter debug;
+PrintWriter outputx, debug;
 void setup()
 {
-  String output = "";
-  String resource = "n.txt";// knowledgebase
-  String rules = "reason.txt";// rules
-  String vocabsyn = loadVocabFiles(30, resource);
-  String[]vocabprep = vocabsyn.split(":::::");
-  String rulesReady = processRules(vocabprep, rules);
-  String[]catfull = split(rulesReady, "::");
-  output = processSentences(catfull, resource, vocabprep);
+  String resource = "test.txt";// knowledgebase
+  String rules = "test.txt";// rules
+  String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), resource, loadVocabFiles(30, resource).split(":::::"));
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.flush();
   outputx.close();
   exit();
 }
-
 String processSentences(String[] catfull, String resource, String[] vocabprep) {
   String output = "";
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
@@ -37,7 +30,6 @@ String processSentences(String[] catfull, String resource, String[] vocabprep) {
   }
   return output;
 }
-
 String returnSentence(String[] catfull, String resource, String[] vocabprep, int catPos2, int scan) {
   String output = "";
   String[]cat = split(catfull[catPos2], ",");
@@ -63,7 +55,7 @@ String returnWords(String[] res, String[] vocabprep, String[] cat, int catPos, i
         int x2 = round(random(words.length-2));
         if (res[z].indexOf(" " + words[x2] + " ") > -1 && res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") > -1 && res[z].indexOf(" " + words[x2] + " ") < res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") && words[x2].length() > 1 && split(vocabprep[int (cat[catPos+1])], "\n")[x].length() > 1) {
           modulate = words[x2] + " " + split(vocabprep[int (cat[catPos+1])], "\n")[x]+ " ";
-          catPos ++;
+          catPos++;
           exit = true;
         }
       }
