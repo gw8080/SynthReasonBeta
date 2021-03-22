@@ -1,5 +1,5 @@
 /* 
- Copyright (C) 2020 George Wagenknecht SynthReason, This program is free
+ Copyright (C) 2021 George Wagenknecht SynthReason, This program is free
  software; you can redistribute it and/or modify it under the terms of the
  GNU General Public License as published by the Free Software Foundation;
  either version 2 of the License, or (at your option) any later version.
@@ -15,26 +15,13 @@ PrintWriter debug;
 void setup()
 {
   String output = "";
-  int checkTries = 5000;
-  int vocabScan = 50;
-  int matchTries = 100;
-  int matchSuccess = 80;
-  String resource = "exp.txt";// knowledgebase
+  String resource = "n.txt";// knowledgebase
   String rules = "reason.txt";// rules
-  String allWords = "words.txt";// rules
   String vocabsyn = loadVocabFiles(30, resource);
-  //String unknownWords = loadUnknowns(vocabsyn, rules, resource, allWords);
-  //vocabsyn += unknownWords + ":::::";
   String[]vocabprep = vocabsyn.split(":::::");
-
-
-  String[] rulesArray = processRules(vocabprep, rules);
-  String rulesReady = rulesArray[0];
-  String navReady = rulesArray[1];
+  String rulesReady = processRules(vocabprep, rules);
   String[]catfull = split(rulesReady, "::");
-  String[]navfull = split(navReady, "::");
-  output = processSentences(catfull, navfull, resource, vocabprep, matchTries, matchSuccess, checkTries);
-
+  output = processSentences(catfull, resource, vocabprep);
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.flush();
@@ -42,68 +29,47 @@ void setup()
   exit();
 }
 
-String processSentences(String[] catfull, String[] navfull, String resource, String[] vocabprep, int matchTries, int matchSuccess, int checkTries) {
+String processSentences(String[] catfull, String resource, String[] vocabprep) {
   String output = "";
-  outputx = createWriter("debug.txt");
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
   {
-    String[]cat = split(catfull[catPos2], ",");
-
-    String outputprep = "";
-    String res = "";
-    if (cat.length-1 > 2) {
-      for (int catPos = 0; catPos != cat.length-1; catPos++)
-      {
-        outputprep += split(vocabprep[int (cat[catPos])], "\n")[round(random(split(vocabprep[int (cat[catPos])], "\n").length-1))] + " ";
-        res += vocabprep[int (cat[catPos])] + "::";
-      }
-    }
-
-    String out = "";
-
-    String[] res3 = split(res, "::");
-    for (int y = 0; y < res3.length-1; y++) {
-      String[]res2 = split(res3[y], "\n");
-      for (int x = 0; x < res2.length-1; x++) {
-        if (outputprep.indexOf(res2[x]) > -1 && res2[x].length() > 1) {
-          out += res2[x] + " ";
-          outputprep = outputprep.replace(res2[x], "");
-          break;
-        }
-      }
-    }
-
-
-    output += out + "\n";
+    output += returnSentence(catfull, resource, vocabprep, catPos2, 200);
   }
   return output;
 }
 
-int StringMatch(String one, String two, String splitToken, int tries) {
-
-  String[] Background = split(one, splitToken);
-  String[] match = split(two, splitToken);
-  int state = 0;
-  for (int a = 0; a < tries; a++) {
-    if (func(Background, match, splitToken, 3, round(random(Background.length-1))) == true) {
-      state++;
+String returnSentence(String[] catfull, String resource, String[] vocabprep, int catPos2, int scan) {
+  String output = "";
+  String[]cat = split(catfull[catPos2], ",");
+  String[] res = split(join(loadStrings(resource), ""), ".");
+  if (cat.length-1 > 2) {
+    for (int catPos = 0; catPos < cat.length-2; catPos++)
+    {
+      output += returnWords(res, vocabprep, cat, catPos, scan);
     }
   }
-  return state;
+  output += ".\n";
+  return output;
 }
-
-boolean func(String[] Background, String[] match, String splitToken, int size, int pos) {
-  boolean state = false;
-  String check ="";
-  if (pos+size <= Background.length-1 && match.length-1 >= size+pos) {
-    for (int a = pos; a < size; a++) {
-      check += match[a] + splitToken;
+String returnWords(String[] res, String[] vocabprep, String[] cat, int catPos, int scan) {
+  String modulate = "";
+  boolean exit = false;
+  for (int lo = 0; lo < 100 && exit == false; lo++ ) {
+    int z = round(random(res.length-2));
+    for (int loop = 0; loop < scan && exit == false; loop++ ) {
+      int x = round(random(split(vocabprep[int (cat[catPos+1])], "\n").length-1));
+      String[] words = split(vocabprep[int (cat[catPos])], "\n");
+      for (int loop2 = 0; loop2 < scan && exit == false; loop2++ ) {
+        int x2 = round(random(words.length-2));
+        if (res[z].indexOf(words[x2]) > -1 && res[z].indexOf(split(vocabprep[int (cat[catPos+1])], "\n")[x]) > -1 && res[z].indexOf(words[x2]) < res[z].indexOf(split(vocabprep[int (cat[catPos+1])], "\n")[x]) && words[x2].length() > 1 && split(vocabprep[int (cat[catPos+1])], "\n")[x].length() > 1) {
+          modulate = words[x2] + " " + split(vocabprep[int (cat[catPos+1])], "\n")[x]+ " ";
+          catPos ++;
+          exit = true;
+        }
+      }
     }
   }
-  if (join(Background, splitToken).indexOf(check, pos) > -1 && check.length() > 0) {
-    state = true;
-  }
-  return state;
+  return modulate;
 }
 String loadVocabFiles(int MAX, String resource) {
   int count = 0;
@@ -124,7 +90,6 @@ String loadVocabFiles(int MAX, String resource) {
           }
         }
       }
-
       String[] vocabproc2 = split(vocabStr, "\n");
       String voc = join(vocabproc2, '\n');
       if (voc.length() > 0)
@@ -139,11 +104,10 @@ String loadVocabFiles(int MAX, String resource) {
   }
   return vocabsyn;
 }
-String[] processRules(String[] vocabprep, String rules) { 
-  String txt = "", nav = "";
+String processRules(String[] vocabprep, String rules) { 
+  String txt = "";
   String enxStr = join(loadStrings(rules), "").replace(",", "").replace(";", "");
   String[] enx = split(enxStr, ".");
-
   for (int z = 0; z < enx.length; z++)
   {
     String[]enwords = split(enx[z], " ");
@@ -154,16 +118,11 @@ String[] processRules(String[] vocabprep, String rules) {
         if (vocabprep[y].indexOf(enwords[x] + "\n") > -1)
         {
           txt += y + ",";// load rules
-          nav += enwords[x] + ",";
           break;
         }
       }
     }
     txt += "::";
-    nav += "::";
   }
-
-  txt += ";;;;;" + nav;
-
-  return split(txt, ";;;;;");
+  return txt;
 }
