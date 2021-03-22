@@ -15,7 +15,7 @@ PrintWriter debug;
 void setup()
 {
   String output = "";
-  String resource = "reason.txt";// knowledgebase
+  String resource = "n.txt";// knowledgebase
   String rules = "reason.txt";// rules
   String vocabsyn = loadVocabFiles(30, resource);
   String[]vocabprep = vocabsyn.split(":::::");
@@ -54,7 +54,7 @@ String returnSentence(String[] catfull, String resource, String[] vocabprep, int
 String returnWords(String[] res, String[] vocabprep, String[] cat, int catPos, int scan) {
   String modulate = "";
   boolean exit = false;
-  for (int lo = 0; lo < 100 && exit == false; lo++ ) {
+  for (int lo = 0; lo < scan && exit == false; lo++ ) {
     int z = round(random(res.length-2));
     for (int loop = 0; loop < scan && exit == false; loop++ ) {
       int x = round(random(split(vocabprep[int (cat[catPos+1])], "\n").length-1));
