@@ -14,9 +14,9 @@ PrintWriter outputx, debug;
 void setup()
 {
   outputx = createWriter("output.txt");
-  String resource = "cyb.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
   String rules = "reason.txt";// syntax rules
-  String workingMem = "exp.txt";// working memory
+  String workingMem = "reason.txt";// working memory
   String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), workingMem, loadVocabFiles(30, resource).split(":::::"));
   outputx.close();
   exit();
@@ -27,7 +27,7 @@ int StringMatch(String one, String two, String splitToken, int tries) {
   String[] match = split(two, splitToken);
   int state = 0;
   for (int a = 0; a < tries; a++) {
-    if (func(Background, match, splitToken, 3, round(random(Background.length-1))) == true) {
+    if (func(Background, match, splitToken, 3, 0) == true) {
       state++;
     }
   }
@@ -57,16 +57,13 @@ String processSentences(String[] catfull, String workingMem, String[] vocabprep)
     String[]cat = split(catfull[catPos2], ",");
     String out = returnSentence(catfull, workingMem, vocabprep, catPos2, 200, minSentenceSize, maxSentenceSize);
     for (int catPos = 0; catPos <= cat.length-1; catPos++) {
-      String check = vocabprep[int (cat[catPos])];
       output = "";
       for (int x =0; x < res.length-1; x++) {
-        if (StringMatch(res[x], out, " ", 100) > 20 ) {
-          if (check.indexOf("\n" + split(res[x], "|")[0] + "\n") > -1) {
-            output = split(res[x], "|")[0] + " ";
-            outputx.print(output);
-            outputx.flush();
-            break;
-          }
+        if (StringMatch(res[x], out, " ", 100) > 50 ) {
+          output = split(res[x], "|")[0] + " ";
+          outputx.print(output);
+          outputx.flush();
+          break;
         }
       }
       if (output.equals("") == true) {
@@ -74,7 +71,7 @@ String processSentences(String[] catfull, String workingMem, String[] vocabprep)
         outputx.flush();
       }
     }
-    outputx.print(".\n");
+    // outputx.print(".\n");
   }
   return output;
 }
@@ -86,7 +83,7 @@ String returnSentence(String[] catfull, String workingMem, String[] vocabprep, i
     int x = 0;
     for (int catPos = 0; catPos < cat.length-1; catPos++)
     {
-      String[] resPos = split(manageMem(res, round(random(res.length-1)), 5), ",");
+      String[] resPos = split(manageMem(res, round(random(res.length-1)), 10), ",");
       if (x < resPos.length-1) {
         x++;
       }
