@@ -56,7 +56,7 @@ String processSentences(String[] catfull, String workingMem, String[] vocabprep)
   {
     String[]cat = split(catfull[catPos2], ",");
     String out = returnSentence(catfull, workingMem, vocabprep, catPos2, 200, minSentenceSize, maxSentenceSize);
-    for (int catPos = 0; catPos < cat.length-1; catPos++) {
+    for (int catPos = 0; catPos <= cat.length-1; catPos++) {
       String check = vocabprep[int (cat[catPos])];
       output = "";
       for (int x =0; x < res.length-1; x++) {
