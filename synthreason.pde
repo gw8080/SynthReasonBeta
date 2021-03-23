@@ -74,6 +74,7 @@ String processSentences(String[] catfull, String workingMem, String[] vocabprep)
         outputx.flush();
       }
     }
+    outputx.print(".\n");
   }
   return output;
 }
