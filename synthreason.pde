@@ -47,13 +47,13 @@ String returnSentence(String[] catfull, String workingMem, String[] vocabprep, i
 String returnWords(String[] res, String[] vocabprep, String[] cat, int catPos, int scan) {
   String modulate = "";
   boolean exit = false;
-  for (int lo = 0; lo < scan && exit == false; lo++ ) {
-    int z = round(random(res.length-2));
-    for (int loop = 0; loop < scan && exit == false; loop++ ) {
-      int x = round(random(split(vocabprep[int (cat[catPos+1])], "\n").length-1));
-      String[] words = split(vocabprep[int (cat[catPos])], "\n");
-      for (int loop2 = 0; loop2 < scan && exit == false; loop2++ ) {
-        int x2 = round(random(words.length-2));
+  for (int loop = 0; loop < scan && exit == false; loop++ ) {
+    int x = round(random(split(vocabprep[int (cat[catPos+1])], "\n").length-1));
+    String[] words = split(vocabprep[int (cat[catPos])], "\n");
+    for (int loop2 = 0; loop2 < scan && exit == false; loop2++ ) {
+      int x2 = round(random(words.length-2));
+      for (int lo = 0; lo < scan && exit == false; lo++ ) {
+        int z = round(random(res.length-2));
         if (res[z].indexOf(" " + words[x2] + " ") > -1 && res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") > -1 && res[z].indexOf(" " + words[x2] + " ") < res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") && words[x2].length() > 1 && split(vocabprep[int (cat[catPos+1])], "\n")[x].length() > 1) {
           modulate = words[x2] + " " + split(vocabprep[int (cat[catPos+1])], "\n")[x]+ " ";
           catPos++;
