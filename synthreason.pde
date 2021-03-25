@@ -15,7 +15,7 @@ void setup()
 {
   String resource = "reason.txt";// knowledgebase
   String rules = "reason.txt";// syntax rules
-  String workingMem = "emotion.txt";// working memory
+  String workingMem = "reason.txt";// working memory
   String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), workingMem, loadVocabFiles(30, resource).split(":::::"));
   outputx = createWriter("output.txt");
   outputx.println(output);
@@ -55,7 +55,24 @@ String returnWords(String[] res, String[] vocabprep, String[] cat, int catPos, i
       for (int lo = 0; lo < scan && exit == false; lo++ ) {
         int z = round(random(res.length-2));
         if (res[z].indexOf(" " + words[x2] + " ") > -1 && res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") > -1 && res[z].indexOf(" " + words[x2] + " ") < res[z].indexOf(" " + split(vocabprep[int (cat[catPos+1])], "\n")[x] + " ") && words[x2].length() > 1 && split(vocabprep[int (cat[catPos+1])], "\n")[x].length() > 1) {
-          modulate = words[x2] + " " + split(vocabprep[int (cat[catPos+1])], "\n")[x]+ " ";
+          int rand = 0;
+          for (int f = 0; f < 10; f++) {
+            rand = round(random(5));
+            if (x2+rand < words.length-1) {
+              break;
+            }
+            rand = 0;
+          }
+          int rand2 = 0;
+          for (int f = 0; f < 10; f++) {
+            rand2 = round(random(5));
+            if (x+rand2 < split(vocabprep[int (cat[catPos+1])], "\n").length-1) {
+              break;
+            }
+            rand2 = 0;
+          }
+
+          modulate = words[x2+rand] + " " + split(vocabprep[int (cat[catPos+1])], "\n")[x+rand2]+ " ";
           catPos++;
           exit = true;
         }
