@@ -15,7 +15,7 @@ void setup()
 {
   String resource = "n.txt";// knowledgebase
   String rules = "reason.txt";// syntax rules
-  String workingMem = "exp.txt";// working memory
+  String workingMem = "n.txt";// working memory
   String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), workingMem, loadVocabFiles(30, resource).split(":::::"));
   outputx = createWriter("output.txt");
   outputx.println(output);
@@ -39,6 +39,7 @@ String returnSentence(String[] catfull, String workingMem, String[] vocabprep, i
     for (int catPos = 0; catPos < cat.length-2; catPos++)
     {
       output += returnWords(res, vocabprep, cat, catPos, scan);
+      catPos++;
     }
   }
   output += ".\n";
@@ -73,7 +74,7 @@ String returnWords(String[] res, String[] vocabprep, String[] cat, int catPos, i
           }
 
           modulate = words[x2-rand] + " " + split(vocabprep[int (cat[catPos+1])], "\n")[x-rand2]+ " ";
-          catPos++;
+
           exit = true;
         }
       }
