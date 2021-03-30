@@ -13,44 +13,31 @@
 PrintWriter outputx, debug;
 void setup()
 {
-  String resource = "n.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
   String rules = "reason.txt";// syntax rules
-  String[] vocab = loadVocabFiles(30, resource).split(":::::");
-  String rulesvar = processRules(vocab, rules);
-
-  String[] test = split(rulesvar, " ");
-  String output = "";
-  for (int x = 0; x < test.length-1; x++) {
-    int go = 1;
-    if (test[x].equals("1") == true) {
-      output+= split(vocab[1], "\n")[round(random(split(vocab[1], "\n").length-1))] + " ";
-      go = 0;
-    }
-    if (test[x].equals("7") == true) {
-      output+= split(vocab[7], "\n")[round(random(split(vocab[7], "\n").length-1))] + " ";
-      go = 0;
-    }
-    if (test[x].equals("13") == true) {
-      output += split(vocab[13], "\n")[round(random(split(vocab[13], "\n").length-1))] + " ";
-      go = 0;
-    }
-    if (go == 1) {
-      output+= test[x] + " ";
-      go = 0;
-    }
-  }
-
-  outputx = createWriter("debug.txt");
-  outputx.println(rulesvar);
-  outputx.flush();
-  outputx.close();
+  String workingMem = "exp.txt";// working memory
+  String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), workingMem, loadVocabFiles(30, resource).split(":::::"));
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.flush();
   outputx.close();
   exit();
 }
-
+String processSentences(String[] catfull, String workingMem, String[] vocabprep) {
+  String output = "";
+  for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
+  {
+    String[]cat = split(catfull[catPos2], ",");
+    if (cat.length-1 > 2) {
+      for (int catPos = 0; catPos < cat.length-2; catPos++)
+      {
+        output += split(vocabprep[int(cat[catPos])], "\n")[round(random(split(vocabprep[int(cat[catPos])], "\n").length-1))] + " ";
+      }
+    }
+    output+=".\n";
+  }
+  return output;
+}
 String loadVocabFiles(int MAX, String resource) {
   int count = 0;
   String[]vocabproc;
@@ -61,10 +48,10 @@ String loadVocabFiles(int MAX, String resource) {
     if (vocabproc != null)
     {
       String vocabStr = "";
-      String[] load = split(join(loadStrings(resource), "").toLowerCase(), " ");
+      String[] load = split(join(loadStrings(resource), "").toLowerCase(), ".");
       for (int a = 0; a < load.length-1; a++) {
         for (int b = 0; b < vocabproc.length-1; b++) {
-          if (load[a].equals(vocabproc[b]) == true && vocabStr.indexOf(vocabproc[b]) == -1) {
+          if (split(load[a], " ")[round(random(split(load[a], " ").length-1))].indexOf(split(vocabproc[b], "\n")[round(random(split(vocabproc[b], "\n").length-1))]) > -1 && vocabStr.indexOf(vocabproc[b]) == -1) {
             vocabStr += "\n"+ vocabproc[b];
             break;
           }
@@ -97,20 +84,12 @@ String processRules(String[] vocabprep, String rules) {
       {
         if (vocabprep[y].indexOf(enwords[x] + "\n") > -1)
         {
-          if (y == 14) {
-            txt += enwords[x] + " ";
-          }
-          if (y == 13 || y == 7 || y == 1) {
-            txt += y + " ";// load rules
-          }
-          if (y != 13 && y != 7 && y != 1 && y != 14) {
-            txt += enwords[x] + " ";// load rules
-          }
+          txt += y + ",";// load rules
           break;
         }
       }
     }
-    txt += "\n ";
+    txt += "::";
   }
   return txt;
 }
