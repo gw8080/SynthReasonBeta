@@ -13,7 +13,7 @@
 PrintWriter outputx, debug;
 void setup()
 {
-  String resource = "uber.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
   String rules = "reason.txt";// syntax rules
   String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), loadVocabFiles(30, resource).split(":::::"));
   outputx = createWriter("output.txt");
@@ -53,7 +53,7 @@ String loadVocabFiles(int MAX, String resource) {
           int x = round(random(split(load[a], " ").length-1));
           int y = round(random(split(vocabproc[b], "\n").length-1));
           if (split(load[a], " ")[x].indexOf(split(vocabproc[b], "\n")[y]) > -1 && vocabStr.indexOf(vocabproc[b]) == -1) {
-            vocabStr += "\n"+ vocabproc[b] + "\n" + split(vocabproc[b], "\n")[y] + "\n" + split(load[a], " ")[x];
+            vocabStr +=   "\n" + split(load[a], " ")[x];
             break;
           }
         }
