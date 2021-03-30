@@ -13,23 +13,22 @@
 PrintWriter outputx, debug;
 void setup()
 {
-  String resource = "reason.txt";// knowledgebase
+  String resource = "uber.txt";// knowledgebase
   String rules = "reason.txt";// syntax rules
-  String workingMem = "exp.txt";// working memory
-  String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), workingMem, loadVocabFiles(30, resource).split(":::::"));
+  String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), loadVocabFiles(30, resource).split(":::::"));
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.flush();
   outputx.close();
   exit();
 }
-String processSentences(String[] catfull, String workingMem, String[] vocabprep) {
+String processSentences(String[] catfull, String[] vocabprep) {
   String output = "";
   for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
   {
     String[]cat = split(catfull[catPos2], ",");
     if (cat.length-1 > 2) {
-      for (int catPos = 0; catPos < cat.length-2; catPos++)
+      for (int catPos = 0; catPos != cat.length-1; catPos++)
       {
         output += split(vocabprep[int(cat[catPos])], "\n")[round(random(split(vocabprep[int(cat[catPos])], "\n").length-1))] + " ";
       }
@@ -51,8 +50,10 @@ String loadVocabFiles(int MAX, String resource) {
       String[] load = split(join(loadStrings(resource), "").toLowerCase(), ".");
       for (int a = 0; a < load.length-1; a++) {
         for (int b = 0; b < vocabproc.length-1; b++) {
-          if (split(load[a], " ")[round(random(split(load[a], " ").length-1))].indexOf(split(vocabproc[b], "\n")[round(random(split(vocabproc[b], "\n").length-1))]) > -1 && vocabStr.indexOf(vocabproc[b]) == -1) {
-            vocabStr += "\n"+ vocabproc[b];
+          int x = round(random(split(load[a], " ").length-1));
+          int y = round(random(split(vocabproc[b], "\n").length-1));
+          if (split(load[a], " ")[x].indexOf(split(vocabproc[b], "\n")[y]) > -1 && vocabStr.indexOf(vocabproc[b]) == -1) {
+            vocabStr += "\n"+ vocabproc[b] + "\n" + split(vocabproc[b], "\n")[y] + "\n" + split(load[a], " ")[x];
             break;
           }
         }
