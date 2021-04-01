@@ -15,22 +15,31 @@ void setup()
 {
   String resource = "reason.txt";// knowledgebase
   String rules = "reason.txt";// syntax rules
-  String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), loadVocabFiles(30, resource).split(":::::"));
+  String memory = "reason.txt";// memory
+  String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), loadVocabFiles(30, resource).split(":::::"), memory);
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.flush();
   outputx.close();
   exit();
 }
-String processSentences(String[] catfull, String[] vocabprep) {
+String processSentences(String[] catfull, String[] vocabprep, String memory) {
   String output = "";
-  for (int catPos2 = 0; catPos2 != catfull.length-1; catPos2++)
+  String workingMem = join(loadStrings(memory), "").toLowerCase().replace(",", "");
+  for (int catPos2 = 0; catPos2 < catfull.length-1; catPos2++)
   {
     String[]cat = split(catfull[catPos2], ",");
-    if (cat.length-1 > 2) {
-      for (int catPos = 0; catPos != cat.length-1; catPos++)
+    if (cat.length-1 > 3) {
+      for (int catPos = 0; catPos < cat.length-2; catPos++)
       {
-        output += split(vocabprep[int(cat[catPos])], "\n")[round(random(split(vocabprep[int(cat[catPos])], "\n").length-1))] + " ";
+        for (int x = 0; x < 1000; x++) {
+          String prep = split(vocabprep[int(cat[catPos])], "\n")[round(random(split(vocabprep[int(cat[catPos])], "\n").length-1))] + " " + split(vocabprep[int(cat[catPos+1])], "\n")[round(random(split(vocabprep[int(cat[catPos+1])], "\n").length-1))] + " ";
+          if (workingMem.indexOf(prep) > -1) {
+            output += prep;
+            catPos++;
+            break;
+          }
+        }
       }
     }
     output+=".\n";
