@@ -1,52 +1,62 @@
-/* 
- Copyright (C) 2021 George Wagenknecht SynthReason, This program is free
- software; you can redistribute it and/or modify it under the terms of the
- GNU General Public License as published by the Free Software Foundation;
- either version 2 of the License, or (at your option) any later version.
- This program is distributed in the hope that it will be useful, but WITHOUT 
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- more details. You should have received a copy of the GNU General Public
- License along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
-
-PrintWriter outputx, debug;
+PrintWriter outputx;
+int paramSize = 10000;
+int wordAttempts = 1000;
 void setup()
 {
-  String resource = "reason.txt";// knowledgebase
-  String rules = "reason.txt";// syntax rules
-  String memory = "reason.txt";// memory
-  String output = processSentences(split(processRules(loadVocabFiles(30, resource).split(":::::"), rules), "::"), loadVocabFiles(30, resource).split(":::::"), memory);
+  String resource = "n.txt";// knowledgebase
+  String output = processSentences(loadVocabFiles(30).split(":::::"), resource);
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.flush();
   outputx.close();
   exit();
 }
-String processSentences(String[] catfull, String[] vocabprep, String memory) {
+String processSentences(String[] vocabprep, String resource) {
   String output = "";
-  String workingMem = join(loadStrings(memory), "").toLowerCase().replace(",", "");
-  for (int catPos2 = 0; catPos2 < catfull.length-1; catPos2++)
-  {
-    String[]cat = split(catfull[catPos2], ",");
-    if (cat.length-1 > 3) {
-      for (int catPos = 0; catPos < cat.length-2; catPos++)
-      {
-        for (int x = 0; x < 1000; x++) {
-          String prep = split(vocabprep[int(cat[catPos])], "\n")[round(random(split(vocabprep[int(cat[catPos])], "\n").length-1))] + " " + split(vocabprep[int(cat[catPos+1])], "\n")[round(random(split(vocabprep[int(cat[catPos+1])], "\n").length-1))] + " ";
-          if (workingMem.indexOf(prep) > -1) {
-            output += prep;
-            catPos++;
-            break;
-          }
-        }
-      }
-    }
-    output+=".\n";
+  String[] res = split(join(loadStrings("dictionary.txt"), "\n").replace(",", "").toLowerCase(), "\n");
+  String[] resB = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), " ");
+  for (int a = 0; a < wordAttempts; a++) {
+    output += divide(meaning(resB[a], res), returnList(vocabprep, resB[a]), 1) + " ";
   }
   return output;
 }
-String loadVocabFiles(int MAX, String resource) {
+String returnList(String[] vocabprep, String word) {
+  String list = "";
+  for (int x = 0; x < vocabprep.length-1; x++) {
+    if (vocabprep[x].indexOf("\n" + word + "\n") > -1) {
+      list = vocabprep[x];
+      break;
+    }
+  }
+  return list;
+}
+String divide(String proc, String dic, int rel) {
+  String word = "";
+  String[] state = split(proc, " ");
+  for (int x = 0; x < paramSize; x++) {
+    int rand = round(random(state.length-1));
+    if (dic.indexOf("\n" + state[rand] + "\n") > -1) {
+      word = state[rand+rel];
+      break;
+    }
+  }
+  return word;
+}
+String meaning(String word, String[] res) {
+  String ret = "";
+  for (int x = 0; x < paramSize; x++) {
+    int y = round(random(res.length-1));
+    String[] array = split(res[y], "|");
+    if (array.length-1 == 1) {
+      if (array[1].replace(",", "").indexOf(" " + word + " ") >-1) {
+        ret = split(res[y], "|")[1];
+        break;
+      }
+    }
+  }
+  return ret;
+}
+String loadVocabFiles(int MAX) {
   int count = 0;
   String[]vocabproc;
   String vocabsyn = "";
@@ -55,20 +65,7 @@ String loadVocabFiles(int MAX, String resource) {
     vocabproc = loadStrings(count + ".txt");
     if (vocabproc != null)
     {
-      String vocabStr = "";
-      String[] load = split(join(loadStrings(resource), "").toLowerCase(), ".");
-      for (int a = 0; a < load.length-1; a++) {
-        for (int b = 0; b < vocabproc.length-1; b++) {
-          int x = round(random(split(load[a], " ").length-1));
-          int y = round(random(split(vocabproc[b], "\n").length-1));
-          if (split(load[a], " ")[x].indexOf(split(vocabproc[b], "\n")[y]) > -1 && vocabStr.indexOf(vocabproc[b]) == -1) {
-            vocabStr +=   "\n" + split(load[a], " ")[x];
-            break;
-          }
-        }
-      }
-      String[] vocabproc2 = split(vocabStr, "\n");
-      String voc = join(vocabproc2, '\n');
+      String voc = join(vocabproc, '\n');
       if (voc.length() > 0)
       {
         vocabsyn += voc + ":::::";// load vocabulary
@@ -80,26 +77,4 @@ String loadVocabFiles(int MAX, String resource) {
     }
   }
   return vocabsyn;
-}
-String processRules(String[] vocabprep, String rules) { 
-  String txt = "";
-  String enxStr = join(loadStrings(rules), "").replace(",", "").replace(";", "");
-  String[] enx = split(enxStr, ".");
-  for (int z = 0; z < enx.length; z++)
-  {
-    String[]enwords = split(enx[z], " ");
-    for (int x = 0; x < enwords.length; x++)
-    {
-      for (int y = 0; y < vocabprep.length; y++)
-      {
-        if (vocabprep[y].indexOf(enwords[x] + "\n") > -1)
-        {
-          txt += y + ",";// load rules
-          break;
-        }
-      }
-    }
-    txt += "::";
-  }
-  return txt;
 }
