@@ -4,7 +4,7 @@ int wordAttempts = 150;
 String rules = "reason.txt";// syntax rules
 void setup()
 {
-  String resource = "reason.txt";// knowledgebase
+  String resource = "n.txt";// knowledgebase
   String output = processSentences(loadVocabFiles(30).split(":::::"), resource);
   outputx = createWriter("output.txt");
   outputx.println(output);
@@ -82,25 +82,4 @@ String loadVocabFiles(int MAX) {
     }
   }
   return vocabsyn;
-}
-String processRules(String[] vocabprep, String rules) { 
-  String txt = "";
-  String enxStr = join(loadStrings(rules), "").replace(",", "").replace(";", "");
-  String[] enx = split(enxStr, ".");
-  for (int z = 0; z < enx.length; z++)
-  {
-    String[]enwords = split(enx[z], " ");
-    for (int x = 0; x < enwords.length; x++)
-    {
-      for (int y = 0; y < vocabprep.length; y++)
-      {
-        if (vocabprep[y].indexOf(enwords[x] + "\n") > -1)
-        {
-          txt += y + ",";// load rules
-          break;
-        }
-      }
-    }
-  }
-  return txt;
 }
