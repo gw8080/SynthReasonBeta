@@ -3,10 +3,15 @@ int paramSize = 5000;
 int wordAttempts = 150;
 void setup()
 {
-  String resource = "uber.txt";// knowledgebase
-  String output = processSentences(loadVocabFiles(30).split(":::::"), resource);
   outputx = createWriter("output.txt");
-  outputx.println(output);
+  String resource = "uber.txt";// knowledgebase
+  for (int x = 0; x < 15; x++) {
+    String output = processSentences(loadVocabFiles(30).split(":::::"), resource);
+    outputx.println(output);
+    outputx.println();
+    outputx.println();
+    outputx.println();
+  }
   outputx.flush();
   outputx.close();
   exit();
@@ -14,11 +19,13 @@ void setup()
 String processSentences(String[] vocabprep, String resource) {
   String output = "";
   String[] res = split(join(loadStrings("dictionary.txt"), "\n").replace(",", "").toLowerCase(), "\n");
-  String[] resB = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), " ");
+  String[] resB = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), ".");
   String resC = join(resB, " ");
   for (int a = 0; a < wordAttempts; a++) {
     int x = round(random(split(output, " ").length-1));
-    output += divide(meaning(split(output, " ")[x], res, resC), returnList(vocabprep, split(output, " ")[x])) + " ";
+    int y = round(random(resB.length-1));
+    output += divide(resB[y], returnList(vocabprep, split(output, " ")[x])) + " ";
+    //meaning(split(output, " ")[x], res, resC)
   }
   return output;
 }
