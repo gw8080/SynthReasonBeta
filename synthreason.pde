@@ -1,9 +1,10 @@
 PrintWriter outputx;
-int paramSize = 10000;
-int wordAttempts = 1000;
+int paramSize = 5000;
+int wordAttempts = 150;
+String rules = "reason.txt";// syntax rules
 void setup()
 {
-  String resource = "n.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
   String output = processSentences(loadVocabFiles(30).split(":::::"), resource);
   outputx = createWriter("output.txt");
   outputx.println(output);
@@ -15,8 +16,9 @@ String processSentences(String[] vocabprep, String resource) {
   String output = "";
   String[] res = split(join(loadStrings("dictionary.txt"), "\n").replace(",", "").toLowerCase(), "\n");
   String[] resB = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), " ");
+  String resC = join(resB, " ");
   for (int a = 0; a < wordAttempts; a++) {
-    output += divide(meaning(resB[a], res), returnList(vocabprep, resB[a]), 1) + " ";
+    output += divide(meaning(resB[a], res, resC), returnList(vocabprep, resB[a])) + " ";
   }
   return output;
 }
@@ -30,25 +32,28 @@ String returnList(String[] vocabprep, String word) {
   }
   return list;
 }
-String divide(String proc, String dic, int rel) {
+String divide(String proc, String dic) {
   String word = "";
   String[] state = split(proc, " ");
   for (int x = 0; x < paramSize; x++) {
-    int rand = round(random(state.length-1));
-    if (dic.indexOf("\n" + state[rand] + "\n") > -1) {
-      word = state[rand+rel];
-      break;
+    int rand = round(random(state.length-3))+1;
+    if (rand > 1) {
+      if (dic.indexOf("\n" + state[rand] + "\n") == -1) {
+        word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
+        break;
+      }
     }
   }
   return word;
 }
-String meaning(String word, String[] res) {
+String meaning(String word, String[] res, String check) {
   String ret = "";
+
   for (int x = 0; x < paramSize; x++) {
     int y = round(random(res.length-1));
     String[] array = split(res[y], "|");
-    if (array.length-1 == 1) {
-      if (array[1].replace(",", "").indexOf(" " + word + " ") >-1) {
+    if (array.length-1 == 1 && check.indexOf(array[0]) > -1) {
+      if (array[1].replace(",", "").indexOf(" " + word + " ") > -1) {
         ret = split(res[y], "|")[1];
         break;
       }
@@ -77,4 +82,25 @@ String loadVocabFiles(int MAX) {
     }
   }
   return vocabsyn;
+}
+String processRules(String[] vocabprep, String rules) { 
+  String txt = "";
+  String enxStr = join(loadStrings(rules), "").replace(",", "").replace(";", "");
+  String[] enx = split(enxStr, ".");
+  for (int z = 0; z < enx.length; z++)
+  {
+    String[]enwords = split(enx[z], " ");
+    for (int x = 0; x < enwords.length; x++)
+    {
+      for (int y = 0; y < vocabprep.length; y++)
+      {
+        if (vocabprep[y].indexOf(enwords[x] + "\n") > -1)
+        {
+          txt += y + ",";// load rules
+          break;
+        }
+      }
+    }
+  }
+  return txt;
 }
