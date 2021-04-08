@@ -18,7 +18,7 @@ void setup()
 }
 String processSentences(String[] vocabprep, String resource) {
   String output = "";
-  String[] res = split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", "").toLowerCase(), ".");
+  String[] res = split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), ".");
   for (int a = 0; a < wordAttempts; a++) {
     int x = round(random(split(output, " ").length-1));
     int y = round(random(res.length-1));
