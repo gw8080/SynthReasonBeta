@@ -6,7 +6,7 @@ void setup()
   outputx = createWriter("output.txt");
   String resource = "n.txt";// knowledgebase
   for (int x = 0; x < 15; x++) {
-    String output = processSentences(loadVocabFiles(30).split(":::::"), resource);
+    String output = processSentences(loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
     outputx.println(output);
     outputx.println();
     outputx.println();
@@ -16,9 +16,8 @@ void setup()
   outputx.close();
   exit();
 }
-String processSentences(String[] vocabprep, String resource) {
+String processSentences(String[] vocabprep, String[] res) {
   String output = "";
-  String[] res = split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), ".");
   for (int a = 0; a < wordAttempts; a++) {
     int x = round(random(split(output, " ").length-1));
     int y = round(random(res.length-1));
