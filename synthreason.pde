@@ -1,7 +1,6 @@
 PrintWriter outputx;
 int paramSize = 5000;
 int wordAttempts = 150;
-String rules = "reason.txt";// syntax rules
 void setup()
 {
   String resource = "n.txt";// knowledgebase
