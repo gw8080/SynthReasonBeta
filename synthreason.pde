@@ -17,7 +17,8 @@ String processSentences(String[] vocabprep, String resource) {
   String[] resB = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), " ");
   String resC = join(resB, " ");
   for (int a = 0; a < wordAttempts; a++) {
-    output += divide(meaning(split(output, " ")[round(random(split(output, " ").length-1))], res, resC), returnList(vocabprep, split(output, " ")[round(random(split(output, " ").length-1))])) + " ";
+    int x = round(random(split(output, " ").length-1));
+    output += divide(meaning(split(output, " ")[x], res, resC), returnList(vocabprep, split(output, " ")[x])) + " ";
   }
   return output;
 }
