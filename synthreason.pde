@@ -3,7 +3,7 @@ int paramSize = 5000;
 int wordAttempts = 150;
 void setup()
 {
-  String resource = "n.txt";// knowledgebase
+  String resource = "uber.txt";// knowledgebase
   String output = processSentences(loadVocabFiles(30).split(":::::"), resource);
   outputx = createWriter("output.txt");
   outputx.println(output);
@@ -17,7 +17,7 @@ String processSentences(String[] vocabprep, String resource) {
   String[] resB = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), " ");
   String resC = join(resB, " ");
   for (int a = 0; a < wordAttempts; a++) {
-    output += divide(meaning(resB[a], res, resC), returnList(vocabprep, resB[a])) + " ";
+    output += divide(meaning(split(output, " ")[round(random(split(output, " ").length-1))], res, resC), returnList(vocabprep, split(output, " ")[round(random(split(output, " ").length-1))])) + " ";
   }
   return output;
 }
