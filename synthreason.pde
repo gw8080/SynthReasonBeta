@@ -4,7 +4,7 @@ int wordAttempts = 150;
 void setup()
 {
   outputx = createWriter("output.txt");
-  String resource = "n.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
   for (int x = 0; x < 15; x++) {
     String output = processSentences(loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
     outputx.println(output);
@@ -18,10 +18,10 @@ void setup()
 }
 String processSentences(String[] vocabprep, String[] res) {
   String output = "";
-  for (int a = 0; a < wordAttempts; a++) {
+  for (int a = 0; a < res.length-1; a++) {
     int x = round(random(split(output, " ").length-1));
     int y = round(random(res.length-1));
-    output += divide(res[y], returnList(vocabprep, split(output, " ")[x])) + " ";
+    output += divide(res[a], returnList(vocabprep, split(output, " ")[x])) + " ";
   }
   return output;
 }
