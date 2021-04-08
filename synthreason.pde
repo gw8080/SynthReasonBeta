@@ -18,14 +18,11 @@ void setup()
 }
 String processSentences(String[] vocabprep, String resource) {
   String output = "";
-  String[] res = split(join(loadStrings("dictionary.txt"), "\n").replace(",", "").toLowerCase(), "\n");
-  String[] resB = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), ".");
-  String resC = join(resB, " ");
+  String[] res = split(join(loadStrings(resource), "\n").replace(",", "").toLowerCase(), ".");
   for (int a = 0; a < wordAttempts; a++) {
     int x = round(random(split(output, " ").length-1));
-    int y = round(random(resB.length-1));
-    output += divide(resB[y], returnList(vocabprep, split(output, " ")[x])) + " ";
-    //meaning(split(output, " ")[x], res, resC)
+    int y = round(random(res.length-1));
+    output += divide(res[y], returnList(vocabprep, split(output, " ")[x])) + " ";
   }
   return output;
 }
@@ -52,21 +49,6 @@ String divide(String proc, String dic) {
     }
   }
   return word;
-}
-String meaning(String word, String[] res, String check) {
-  String ret = "";
-
-  for (int x = 0; x < paramSize; x++) {
-    int y = round(random(res.length-1));
-    String[] array = split(res[y], "|");
-    if (array.length-1 == 1 && check.indexOf(array[0]) > -1) {
-      if (array[1].replace(",", "").indexOf(" " + word + " ") > -1) {
-        ret = split(res[y], "|")[1];
-        break;
-      }
-    }
-  }
-  return ret;
 }
 String loadVocabFiles(int MAX) {
   int count = 0;
