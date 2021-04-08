@@ -38,7 +38,7 @@ String divide(String proc, String dic) {
   for (int x = 0; x < paramSize; x++) {
     int rand = round(random(state.length-3))+1;
     if (rand > 1) {
-      if (dic.indexOf("\n" + state[rand] + "\n") == -1) {
+      if (dic.indexOf("\n" + state[rand-1] + "\n") == -1 &&dic.indexOf("\n" + state[rand] + "\n") == -1 && dic.indexOf("\n" + state[rand+1] + "\n") == -1) {
         word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
         break;
       }
