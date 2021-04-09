@@ -4,7 +4,6 @@ int wordAttempts = 150;
 void setup()
 {
   outputx = createWriter("output.txt");
-  rules = createWriter("rules.txt");
   String resource = "uber.txt";// knowledgebase
   for (int x = 0; x < 15; x++) {
     String output = processSentences(loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
@@ -23,9 +22,7 @@ String processSentences(String[] vocabprep, String[] res) {
     int x = round(random(split(join(output, ""), " ").length-1));
     int y = round(random(res.length-1));
     for (int b = 0; b < round(random(5)); b++) {
-
       String test = divide(res[y], returnList(vocabprep, split(join(output, ""), " ")[x])) + " ";
-
       output[round(random(output.length-1))] = test;
     }
   }
