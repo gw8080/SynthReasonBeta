@@ -1,15 +1,15 @@
-PrintWriter outputx;
+PrintWriter outputx, rules;
 int paramSize = 5000;
 int wordAttempts = 150;
 void setup()
 {
   outputx = createWriter("output.txt");
-  String resource = "reason.txt";// knowledgebase
+  rules = createWriter("rules.txt");
+  String resource = "uber.txt";// knowledgebase
   for (int x = 0; x < 15; x++) {
     String output = processSentences(loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
+    output = output.replace("null", "");
     outputx.println(output);
-    outputx.println();
-    outputx.println();
     outputx.println();
   }
   outputx.flush();
@@ -17,13 +17,19 @@ void setup()
   exit();
 }
 String processSentences(String[] vocabprep, String[] res) {
-  String output = "";
+  String[] output = new String[10000];
   for (int a = 0; a < wordAttempts; a++) {
-    int x = round(random(split(output, " ").length-1));
+
+    int x = round(random(split(join(output, ""), " ").length-1));
     int y = round(random(res.length-1));
-    output += divide(res[y], returnList(vocabprep, split(output, " ")[x])) + " ";
+    for (int b = 0; b < round(random(5)); b++) {
+
+      String test = divide(res[y], returnList(vocabprep, split(join(output, ""), " ")[x])) + " ";
+
+      output[round(random(output.length-1))] = test;
+    }
   }
-  return output;
+  return join(output, "");
 }
 String returnList(String[] vocabprep, String word) {
   String list = "";
