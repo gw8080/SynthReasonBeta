@@ -4,9 +4,10 @@ int wordAttempts = 150;
 void setup()
 {
   outputx = createWriter("output.txt");
-  String resource = "uber.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
+  String workingMem = "reason.txt";// knowledgebase
   for (int x = 0; x < 15; x++) {
-    String output = processSentences(loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
+    String output = processSentences(loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."), split(join(loadStrings(workingMem), "").replace(",", "").replace("\n", " ").toLowerCase(), " "));
     output = output.replace("null", "");
     outputx.println(output);
     outputx.println();
@@ -15,18 +16,27 @@ void setup()
   outputx.close();
   exit();
 }
-String processSentences(String[] vocabprep, String[] res) {
-  String[] output = new String[10000];
+String processSentences(String[] vocabprep, String[] res, String[] workingMem) {
+  String[] output = new String[1000000];
   for (int a = 0; a < wordAttempts; a++) {
-
     int x = round(random(split(join(output, ""), " ").length-1));
-    int y = round(random(res.length-1));
+    int y = round(random(res.length-2));
     for (int b = 0; b < round(random(5)); b++) {
-      String test = divide(res[y], returnList(vocabprep, split(join(output, ""), " ")[x])) + " ";
-      output[round(random(output.length-1))] = test;
+      String test = divide(res[y], returnList(vocabprep, split(join(output, ""), " ")[split(join(output, ""), " ").length-1])) + " ";
+      output[findWord(split(test, " ")[round(random(split(test, " ").length-1))], workingMem)] = test;
     }
   }
   return join(output, "");
+}
+int findWord(String word, String[] res) {
+  int state = 0;
+  for (int x = 0; x < res.length-1; x++) {
+    if (word.equals(res[x]) == true) {
+      state = x;
+      break;
+    }
+  }
+  return state;
 }
 String returnList(String[] vocabprep, String word) {
   String list = "";
