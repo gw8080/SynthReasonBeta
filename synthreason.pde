@@ -3,8 +3,8 @@ int paramSize = 1000;
 int contextualAttempts = 100;
 void setup()
 {
-  String resource = "n.txt";// knowledgebase
-  String workingMem = "n.txt";// knowledgebase
+  String resource = "reason.txt";// knowledgebase
+  String workingMem = "reason.txt";// knowledgebase
   String[] dic = loadStrings("dictionary.txt");
   String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."), split(join(loadStrings(workingMem), "").replace(",", "").replace("\n", " ").toLowerCase(), " "));
   outputx = createWriter("output.txt");
