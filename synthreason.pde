@@ -14,17 +14,11 @@ void setup()
 }
 String processSentences(String[] dic, String[] vocabprep, String[] res, String[] workingMem) {
   String output = "";
-  for (int b = 0; b < contextualAttempts; ) {
+  for (int b = 0; b < contextualAttempts; b++ ) {
     int x = round(random(split(output, " ").length-1));
     int y = round(random(res.length-2));
-    String test = divide(res[y], returnList(vocabprep, split(output, " ")[x]));
-    String testprep = word(test, dic, split(output, " ")[round(random(split(output, " ").length-1))], split(output, " ")[round(random(split(output, " ").length-1))], split(output, " ")[round(random(split(output, " ").length-1))]);
-    if (test.length() > 2 && testprep.length() > 2) {
-      if (test.indexOf(testprep) == -1 && test.indexOf(split(output, " ")[split(output, " ").length-1]) > -1) {
-        output +=  testprep + " " + test + " ";
-        b++;
-      }
-    }
+    String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])));
+    output += test + " ";
   }
   return output;
 }
@@ -54,7 +48,7 @@ String divide(String proc, String dic) {
   for (int x = 0; x < paramSize; x++) {
     int rand = round(random(state.length-3))+1;
     if (rand > 1) {
-      if (dic.indexOf("\n" + state[rand] + "\n") == -1) {
+      if (dic.indexOf("\n" + state[rand] + "\n") > -1) {
         word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
         break;
       }
@@ -62,14 +56,14 @@ String divide(String proc, String dic) {
   }
   return word;
 }
-String word(String meaning, String[] res, String check, String check2, String check3) {
+String word(String meaning, String[] res, String check) {
   String ret = "";
   meaning = meaning.replace(",", "");
   for (int x = 0; x < 1000; x++) {
     int y = round(random(res.length-1));
     String[] array = split(res[y], "|");
     if (array.length-1 == 1) {
-      if (array[1].indexOf(" " + meaning + " ") > -1 && array[1].indexOf(" " + check2 + " ") > -1 && array[1].indexOf(" " + check3 + " ") > -1 && array[1].indexOf(" " + check + " ") > -1) {
+      if (array[1].indexOf(" " + meaning + " ") > -1 && array[1].indexOf(" " + check + " ") > -1) {
         ret = split(res[y], "|")[0];
         break;
       }
