@@ -4,15 +4,14 @@ int contextualAttempts = 100;
 void setup()
 {
   String resource = "n.txt";// knowledgebase
-  String workingMem = "n.txt";// knowledgebase
   String[] dic = loadStrings("dictionary.txt");
-  String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."), split(join(loadStrings(workingMem), "").replace(",", "").replace("\n", " ").toLowerCase(), " "));
+  String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.close();
   exit();
 }
-String processSentences(String[] dic, String[] vocabprep, String[] res, String[] workingMem) {
+String processSentences(String[] dic, String[] vocabprep, String[] res) {
   String output = "";
   for (int b = 0; b < contextualAttempts; b++ ) {
     int y = round(random(res.length-2));
