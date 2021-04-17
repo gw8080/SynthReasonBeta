@@ -1,6 +1,6 @@
 PrintWriter outputx;
-int paramSize = 1000;
-int contextualAttempts = 100;
+int paramSize = 10000;
+int contextualAttempts = 50;
 void setup()
 {
   String resource = "n.txt";// knowledgebase
