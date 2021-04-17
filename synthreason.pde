@@ -13,10 +13,20 @@ void setup()
 }
 String processSentences(String[] dic, String[] vocabprep, String[] res) {
   String output = "";
-  for (int b = 0; b < contextualAttempts; b++ ) {
-    int y = round(random(res.length-2));
-    String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])));
-    output += test + " ";
+  int y = round(random(res.length-2));
+  String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])));
+  output += test + " ";
+  for (int b = 0; b < contextualAttempts; ) {
+    y = round(random(res.length-2));
+    test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])));
+    if (split(test, " ").length > 2) {
+      b++;
+      String check = split(test, " ")[split(test, " ").length-1]; 
+      if (check.length()-1 < 3) {
+        test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-2], dic, split(output, " ")[split(output, " ").length-2])));
+      }
+      output += test + " ";
+    }
   }
   return output;
 }
