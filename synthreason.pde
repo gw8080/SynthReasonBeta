@@ -3,12 +3,15 @@ int paramSize = 10000;
 int contextualAttempts = 100;
 void setup()
 {
-  String seed = "reason.txt";// seed knowledgebase
-  String memory = "exp.txt";// larger knowledgebase
-  String[] dic = loadStrings("dictionary.txt");
-  String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(seed), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."), split(join(loadStrings(memory), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
   outputx = createWriter("output.txt");
-  outputx.println(output);
+  String seed = "exp.txt";// seed knowledgebase
+  String memory = "merge.txt";// larger knowledgebase
+  String[] dic = loadStrings("dictionary.txt");
+  for (int i = 0; i < 10; i++) {
+    String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(seed), "\n").replace(",", "").toLowerCase(), "\n"), split(join(loadStrings(memory), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
+    outputx.println(output);
+    outputx.println();
+  }
   outputx.close();
   exit();
 }
@@ -18,7 +21,7 @@ String processSentences(String[] dic, String[] vocabprep, String[] res, String[]
 
   for (int b = 0; b < contextualAttempts; ) {
     int y = round(random(res.length-1));
-    String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])), res2, split(output, " ")[split(output, " ").length-1]); 
+    String test = divide(dic, res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])), res2, split(output, " ")[split(output, " ").length-1]); 
     if (output.indexOf(test) == -1) {
       output += test + " ";
       b++;
@@ -46,14 +49,14 @@ String returnList(String[] vocabprep, String word) {
   }
   return list;
 }
-String divide(String proc, String dic, String[] mem, String previous) {
+String divide(String[] dictionary, String proc, String dic, String[] mem, String previous) {
   String word = "";
   String[] state = split(proc, " ");
   for (int x = 0; x < paramSize; x++) {
     int rand = round(random(state.length-3))+1;
     int y = round(random(mem.length-1));
     if (rand > 1) {
-      if (dic.indexOf("\n" + state[rand] + "\n") == -1 && mem[y].indexOf(previous + " " + state[rand-1]) == -1) {
+      if (dic.indexOf("\n" + state[rand] + "\n") == -1 && mem[y].indexOf(previous + " " + state[rand-1]) == -1 && previous.indexOf( word(proc, dictionary, state[rand+1])) > -1) {
         word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
         break;
       }
