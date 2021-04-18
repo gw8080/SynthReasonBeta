@@ -4,20 +4,21 @@ int contextualAttempts = 100;
 void setup()
 {
   String resource = "exp.txt";// knowledgebase
+  String resource2 = "merge.txt";// knowledgebase
   String[] dic = loadStrings("dictionary.txt");
-  String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
+  String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."), split(join(loadStrings(resource2), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.close();
   exit();
 }
-String processSentences(String[] dic, String[] vocabprep, String[] res) {
+String processSentences(String[] dic, String[] vocabprep, String[] res, String[] res2) {
   String output = "";
 
 
   for (int b = 0; b < contextualAttempts; ) {
     int y = round(random(res.length-1));
-    String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])), res); 
+    String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])), res2, split(output, " ")[split(output, " ").length-1]); 
     if (output.indexOf(test) == -1) {
       output += test + " ";
       b++;
@@ -45,14 +46,14 @@ String returnList(String[] vocabprep, String word) {
   }
   return list;
 }
-String divide(String proc, String dic, String[] mem) {
+String divide(String proc, String dic, String[] mem, String previous) {
   String word = "";
   String[] state = split(proc, " ");
   for (int x = 0; x < paramSize; x++) {
     int rand = round(random(state.length-3))+1;
     int y = round(random(mem.length-1));
     if (rand > 1) {
-      if (dic.indexOf("\n" + state[rand] + "\n") > -1 && mem[y].indexOf(state[rand]) > -1) {
+      if (dic.indexOf("\n" + state[rand] + "\n") == -1 && mem[y].indexOf(previous + " " + state[rand-1]) == -1) {
         word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
         break;
       }
