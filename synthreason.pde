@@ -1,6 +1,6 @@
 PrintWriter outputx;
 int paramSize = 10000;
-int contextualAttempts = 50;
+int contextualAttempts = 100;
 void setup()
 {
   String resource = "exp.txt";// knowledgebase
@@ -13,19 +13,14 @@ void setup()
 }
 String processSentences(String[] dic, String[] vocabprep, String[] res) {
   String output = "";
-  int y = round(random(res.length-2));
-  String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])));
-  output += test + " ";
+
+
   for (int b = 0; b < contextualAttempts; ) {
-    y = round(random(res.length-2));
-    test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])));
-    if (split(test, " ").length > 2) {
-      b++;
-      String check = split(test, " ")[split(test, " ").length-1]; 
-      if (check.length()-1 < 3) {
-        test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-2], dic, split(output, " ")[split(output, " ").length-2])));
-      }
+    int y = round(random(res.length-1));
+    String test = divide(res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])), res); 
+    if (output.indexOf(test) == -1) {
       output += test + " ";
+      b++;
     }
   }
   return output;
@@ -50,13 +45,14 @@ String returnList(String[] vocabprep, String word) {
   }
   return list;
 }
-String divide(String proc, String dic) {
+String divide(String proc, String dic, String[] mem) {
   String word = "";
   String[] state = split(proc, " ");
   for (int x = 0; x < paramSize; x++) {
     int rand = round(random(state.length-3))+1;
+    int y = round(random(mem.length-1));
     if (rand > 1) {
-      if (dic.indexOf("\n" + state[rand] + "\n") > -1) {
+      if (dic.indexOf("\n" + state[rand] + "\n") > -1 && mem[y].indexOf(state[rand]) > -1) {
         word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
         break;
       }
