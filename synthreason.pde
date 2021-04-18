@@ -3,10 +3,10 @@ int paramSize = 10000;
 int contextualAttempts = 100;
 void setup()
 {
-  String resource = "exp.txt";// knowledgebase
-  String resource2 = "merge.txt";// knowledgebase
+  String seed = "reason.txt";// seed knowledgebase
+  String memory = "exp.txt";// larger knowledgebase
   String[] dic = loadStrings("dictionary.txt");
-  String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(resource), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."), split(join(loadStrings(resource2), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
+  String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(seed), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."), split(join(loadStrings(memory), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
   outputx = createWriter("output.txt");
   outputx.println(output);
   outputx.close();
