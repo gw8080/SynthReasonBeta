@@ -1,43 +1,45 @@
 PrintWriter outputx;
-int paramSize = 10000;
-int contextualAttempts = 100;
+int attempts = 100;
+int detection = 20;
 void setup()
 {
-  outputx = createWriter("output.txt");
-  String seed = "exp.txt";// seed knowledgebase
-  String memory = "merge.txt";// larger knowledgebase
-  String[] dic = loadStrings("dictionary.txt");
-  for (int i = 0; i < 10; i++) {
-    String output = processSentences(dic, loadVocabFiles(30).split(":::::"), split(join(loadStrings(seed), "\n").replace(",", "").toLowerCase(), "\n"), split(join(loadStrings(memory), "\n").replace(",", "").replace("\n", " ").toLowerCase(), "."));
-    outputx.println(output);
-    outputx.println();
+
+  String[] resource = split(join(loadStrings("exp.txt"), ""), ".");
+  String[] noun = loadStrings("noun.txt");
+  String[] verb = loadStrings("verb.txt");
+  String[] vocabprep = split(loadVocabFiles(30), ":::::");
+  String[] memory = split(join(loadStrings("exp.txt"), ""), ".");
+  String output = "";
+  for (int h = 0; h < attempts; ) {
+    int y = round(random(noun.length-1));
+    int z = round(random(verb.length-1));
+    String object = noun[y];
+    String interaction = verb[z];
+    //interaction = "align";
+    String rateOfChange = change(object, interaction, resource);
+    if (rateOfChange.equals("0/0") == false && int(split(rateOfChange, "/")[0]) > detection) {
+      output += divide(join(memory, ""), returnList(vocabprep, interaction)) + " " + divide(join(memory, ""), returnList(vocabprep, object)) + " "; 
+      h++;
+    }
   }
+  outputx = createWriter("output.txt");
+  outputx.println(output);
   outputx.close();
   exit();
 }
-String processSentences(String[] dic, String[] vocabprep, String[] res, String[] res2) {
-  String output = "";
-
-
-  for (int b = 0; b < contextualAttempts; ) {
-    int y = round(random(res.length-1));
-    String test = divide(dic, res[y], returnList(vocabprep, word(split(output, " ")[split(output, " ").length-1], dic, split(output, " ")[split(output, " ").length-1])), res2, split(output, " ")[split(output, " ").length-1]); 
-    if (output.indexOf(test) == -1) {
-      output += test + " ";
-      b++;
+String divide(String proc, String dic) {
+  String word = "";
+  String[] state = split(proc, " ");
+  for (int x = 0; x < 1000; x++) {
+    int rand = round(random(state.length-3))+1;
+    if (rand > 1) {
+      if (dic.indexOf("\n" + state[rand] + "\n") > -1) {
+        word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
+        break;
+      }
     }
   }
-  return output;
-}
-int findWord(String word, String[] res) {
-  int state = 0;
-  for (int x = 0; x < res.length-1; x++) {
-    if (word.equals(res[x]) == true) {
-      state = x;
-      break;
-    }
-  }
-  return state;
+  return word;
 }
 String returnList(String[] vocabprep, String word) {
   String list = "";
@@ -48,36 +50,6 @@ String returnList(String[] vocabprep, String word) {
     }
   }
   return list;
-}
-String divide(String[] dictionary, String proc, String dic, String[] mem, String previous) {
-  String word = "";
-  String[] state = split(proc, " ");
-  for (int x = 0; x < paramSize; x++) {
-    int rand = round(random(state.length-3))+1;
-    int y = round(random(mem.length-1));
-    if (rand > 1) {
-      if (dic.indexOf("\n" + state[rand] + "\n") == -1 && mem[y].indexOf(previous + " " + state[rand-1]) == -1 && previous.indexOf( word(proc, dictionary, state[rand+1])) > -1) {
-        word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
-        break;
-      }
-    }
-  }
-  return word;
-}
-String word(String meaning, String[] res, String check) {
-  String ret = "";
-  meaning = meaning.replace(",", "");
-  for (int x = 0; x < 1000; x++) {
-    int y = round(random(res.length-1));
-    String[] array = split(res[y], "|");
-    if (array.length-1 == 1) {
-      if (array[1].indexOf(" " + meaning + " ") > -1 && array[1].indexOf(" " + check + " ") > -1) {
-        ret = split(res[y], "|")[0];
-        break;
-      }
-    }
-  }
-  return ret;
 }
 String loadVocabFiles(int MAX) {
   int count = 0;
@@ -100,4 +72,27 @@ String loadVocabFiles(int MAX) {
     }
   }
   return vocabsyn;
+}
+String change(String object, String interaction, String[] resource) {
+  String state = "";
+  int objectCount = 0, objectReductionCount = 0;
+  for (int j = 0; j < resource.length-1; j++) {
+    if (resource[j].indexOf(" " + object + " ") > -1) {
+      objectCount++;
+    }
+  }
+  String resourceProc = join(resource, ".");
+  for (int j = 0; j < resource.length-1; j++) {
+    if (resource[j].indexOf(" " + interaction + " ") > -1) {
+      resourceProc.replace(resource[j], "");
+    }
+  }
+  String[] resourceA = split(resourceProc, " ");
+  for (int j = 0; j < resourceA.length-1; j++) {
+    if (resourceA[j].indexOf(" " + object + " ") > -1) {
+      objectReductionCount++;
+    }
+  }
+  state = objectCount + "/" + objectReductionCount;
+  return state;
 }
