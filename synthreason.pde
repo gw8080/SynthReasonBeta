@@ -2,7 +2,7 @@ PrintWriter outputx;
 int attempts = 100;
 int detection = 20;
 int scan = 1000;
-String text = "exp.txt";
+String text = "reason.txt";
 void setup()
 {
   String[] resource = split(join(loadStrings(text), ""), ".");
@@ -19,7 +19,7 @@ void setup()
     //interaction = "align";
     String rateOfChange = change(object, interaction, resource);
     if (rateOfChange.equals("0/0") == false && int(split(rateOfChange, "/")[0]) > detection) {
-      output += divide(join(memory, ""), returnList(vocabprep, interaction)) + " " + divide(join(memory, ""), returnList(vocabprep, object)) + " "; 
+      output += divide(join(memory, ""), returnList(vocabprep, interaction), interaction) + " " + divide(join(memory, ""), returnList(vocabprep, object), object) + " "; 
       h++;
     }
   }
@@ -28,14 +28,14 @@ void setup()
   outputx.close();
   exit();
 }
-String divide(String proc, String dic) {
+String divide(String proc, String dic, String check) {
   String word = "";
   String[] state = split(proc, " ");
   for (int x = 0; x < scan; x++) {
     int rand = round(random(state.length-3))+1;
     if (rand > 1) {
-      if (dic.indexOf("\n" + state[rand] + "\n") > -1) {
-        word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
+      word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
+      if (dic.indexOf("\n" + state[rand] + "\n") > -1 && word.equals(check) == true) {       
         break;
       }
     }
