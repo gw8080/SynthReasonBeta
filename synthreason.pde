@@ -1,10 +1,11 @@
 PrintWriter outputx;
 int attempts = 100;
 int detection = 20;
+int scan = 1000;
+String text = "exp.txt";
 void setup()
 {
-
-  String[] resource = split(join(loadStrings("exp.txt"), ""), ".");
+  String[] resource = split(join(loadStrings(text), ""), ".");
   String[] noun = loadStrings("noun.txt");
   String[] verb = loadStrings("verb.txt");
   String[] vocabprep = split(loadVocabFiles(30), ":::::");
@@ -30,7 +31,7 @@ void setup()
 String divide(String proc, String dic) {
   String word = "";
   String[] state = split(proc, " ");
-  for (int x = 0; x < 1000; x++) {
+  for (int x = 0; x < scan; x++) {
     int rand = round(random(state.length-3))+1;
     if (rand > 1) {
       if (dic.indexOf("\n" + state[rand] + "\n") > -1) {
