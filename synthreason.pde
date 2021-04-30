@@ -1,7 +1,8 @@
 PrintWriter outputx;
 int attempts = 100;
-int detection = 20;
+int detection = 10;
 int scan = 1000;
+int flow = 5;
 String text = "reason.txt";
 void setup()
 {
@@ -17,10 +18,16 @@ void setup()
     String object = noun[y];
     String interaction = verb[z];
     //interaction = "align";
-    String rateOfChange = change(object, interaction, resource);
-    if (rateOfChange.equals("0/0") == false && int(split(rateOfChange, "/")[0]) > detection) {
-      output += divide(join(memory, ""), returnList(vocabprep, interaction), interaction) + " " + divide(join(memory, ""), returnList(vocabprep, object), object) + " "; 
-      h++;
+    for (int x = 0; x < flow; x++) {
+      String rateOfChange = change(object, interaction, resource);
+      if (rateOfChange.equals("0/0") == false && int(split(rateOfChange, "/")[0]) > detection) {
+        String test = divide(join(memory, ""), returnList(vocabprep, interaction), interaction);
+        String test2 = divide(join(memory, ""), returnList(vocabprep, object), object);
+        output += test + " " + test2 + " ";
+        interaction = split(test, " ")[split(test, " ").length-1];
+        object = split(test2, " ")[split(test2, " ").length-1];
+        h++;
+      }
     }
   }
   outputx = createWriter("output.txt");
@@ -35,7 +42,7 @@ String divide(String proc, String dic, String check) {
     int rand = round(random(state.length-3))+1;
     if (rand > 1) {
       word = state[rand-1] + " " + state[rand] + " " + state[rand+1];
-      if (dic.indexOf("\n" + state[rand] + "\n") > -1 && word.equals(check) == true) {       
+      if (dic.indexOf("\n" + state[rand] + "\n") > -1 && word.indexOf(check) > -1) {       
         break;
       }
     }
