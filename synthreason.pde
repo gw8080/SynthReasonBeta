@@ -2,22 +2,21 @@ PrintWriter outputx;
 int attempts = 100;
 int detection = 10;
 int scan = 1000;
-int flow = 5;
-String text = "reason.txt";
+int flow = 10;
+String text = "exp.txt";
 void setup()
 {
   String[] resource = split(join(loadStrings(text), ""), ".");
   String[] noun = loadStrings("noun.txt");
   String[] verb = loadStrings("verb.txt");
   String[] vocabprep = split(loadVocabFiles(30), ":::::");
-  String[] memory = split(join(loadStrings("exp.txt"), ""), ".");
+  String[] memory = split(join(loadStrings(text), ""), ".");
   String output = "";
   for (int h = 0; h < attempts; ) {
     int y = round(random(noun.length-1));
     int z = round(random(verb.length-1));
     String object = noun[y];
     String interaction = verb[z];
-    //interaction = "align";
     for (int x = 0; x < flow; x++) {
       String rateOfChange = change(object, interaction, resource);
       if (rateOfChange.equals("0/0") == false && int(split(rateOfChange, "/")[0]) > detection) {
