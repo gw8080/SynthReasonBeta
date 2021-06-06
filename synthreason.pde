@@ -1,5 +1,5 @@
 PrintWriter outputx;
-String mentalResource = "uber.txt";
+String mentalResource = "exp.txt";
 String NLP_Resource = "exp.txt";
 int retryLimit = 50;
 int mainLoop = 10;
@@ -34,8 +34,10 @@ void setup()
               for (int a = test.length-2; a > 0; a--) {
                 process += test[a] + " ";
               }
-              output = process + combo + " ";
-              h++;
+              if (resFull.indexOf(split(process, " ")[split(process, " ").length-2] + " " + split(combo, " ")[0]) > -1) {
+                output = process + combo + " ";
+                h++;
+              }
             }
           }
         }
@@ -46,8 +48,12 @@ void setup()
       }
     }
   }
+  String output2 = "";
+  for (int b = split(output, " ").length/2; b > 0; b-- ) {
+    output2 += split(output, " ")[b] + " ";
+  }
   outputx = createWriter("output.txt");
-  outputx.println(output);
+  outputx.println(output2);
   outputx.close();
   exit();
 }
